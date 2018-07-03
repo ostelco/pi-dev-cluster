@@ -65,6 +65,6 @@ terraform {
   backend "gcs" {
     bucket      = "pantel-tests-terraform-state"
     prefix      = "cluster/dev/state"
-    credentials = "/tmp/credentials.json"
+#    credentials = "/tmp/credentials.json"
   }
 }
