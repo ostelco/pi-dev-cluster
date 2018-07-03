@@ -6,6 +6,7 @@ variable "credentials_path" {
 variable "project_name" {
   type        = "string"
   description = "Google Cloud project name."
+  default     = "pantel-tests"
 }
 
 variable "cluster_region" {
