@@ -1,7 +1,7 @@
-variable "credentials_path" {
-  type        = "string"
-  description = "the path to your Google Cloud json credentials file."
-}
+#variable "credentials_path" {
+#  type        = "string"
+#  description = "the path to your Google Cloud json credentials file."
+#}
 
 variable "project_name" {
   type        = "string"
@@ -17,7 +17,7 @@ variable "cluster_region" {
 
 # Configure the Google Cloud provider
 provider "google" {
-  credentials = "${file(var.credentials_path)}"
+#  credentials = "${file(var.credentials_path)}"
   project     = "${var.project_name}"
   region      = "${var.cluster_region}"
 }
