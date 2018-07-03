@@ -1,0 +1,60 @@
+version: 2
+jobs:
+  terraform-plan:
+    docker:
+      # this image takes gcloud credentials from an env variable called: GCLOUD_CREDENTIALS and authenticates gcloud with it.
+      # the credentials file is made available inside the container in: /tmp/credentials.json
+    - image: praqma/terraform-gcloud:11.7
+
+    working_directory: ~/repo
+
+    steps:
+    - checkout
+      # you may have different input variables needed below. These will be passed from circleci environment variables
+    - run:
+        name: running terraform plan
+        command: |
+          terraform init
+          terraform plan \
+          -var credentials_path=/tmp/credentials.json \
+          -var cluster_username=$CLUSTER_USERNAME \
+          -var cluster_password=$CLUSTER_PASSWORD
+
+  terraform-apply:
+    docker:
+      # this image takes gcloud credentials from an env variable called: GCLOUD_CREDENTIALS and authenticates gcloud with it.
+      # the credentials file is made available inside the container in: /tmp/credentials.json
+    - image: praqma/terraform-gcloud:11.7
+
+    working_directory: ~/repo
+
+    steps:
+    - checkout
+      # you may have different input variables needed below. These will be passed from circleci environment variables
+    - run:
+        name: running terraform apply
+        command: |
+          terraform init
+          terraform apply --auto-approve  \
+          -var credentials_path=/tmp/credentials.json \
+          -var cluster_username=$CLUSTER_USERNAME \
+          -var cluster_password=$CLUSTER_PASSWORD
+
+workflows:
+  version: 2
+  clusters-plan-approve-and-deploy:
+    jobs:
+    - terraform-plan:
+        filters:
+          branches:
+            only:
+            - master
+
+    - hold-before-creating-cluster:
+        type: approval
+        requires:
+        - terraform-plan
+
+    - terraform-apply:
+        requires:
+        - hold-before-creating-cluster
