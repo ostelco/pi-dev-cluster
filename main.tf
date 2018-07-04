@@ -35,7 +35,6 @@ module "gke" {
   cluster_name             = "my-cluster"
   cluster_description      = "module example."
   cluster_version          = "1.9.7-gke.3"
-  cluster_region           = "${var.cluster_region}"
   cluster_zone             = "${var.cluster_zone}"
   remove_default_node_pool = "true"                                                # set to true to delete default node pool
 }
