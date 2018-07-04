@@ -10,9 +10,16 @@ variable "project_name" {
 }
 
 variable "cluster_region" {
-  default     = "europe-west1"
+  default     = "europe-west2"
   type        = "string"
   description = "The region where the cluster will be created."
+}
+
+
+variable "cluster_zone" {
+  default     = "europe-west2-c"
+  type        = "string"
+  description = "The zone where the cluster will be created."
 }
 
 # Configure the Google Cloud provider
@@ -28,6 +35,8 @@ module "gke" {
   cluster_name             = "my-cluster"
   cluster_description      = "module example."
   cluster_version          = "1.9.7-gke.3"
+  cluster_region           = "${var.cluster_region}"
+  cluster_zone             = "${var.cluster_zone}"
   remove_default_node_pool = "true"                                                # set to true to delete default node pool
 }
 
