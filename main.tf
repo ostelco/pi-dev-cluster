@@ -32,10 +32,11 @@ module "gke" {
 }
 
 module "np" {
-  source       = "github.com/Praqma/terraform-google-gke//gke-node-pool"
-  cluster_name = "${module.gke.cluster_name}"
-  cluster_zone = "${module.gke.cluster_zone}"
-  node_tags    = ["tag1", "tag2"]
+  source          = "github.com/Praqma/terraform-google-gke//gke-node-pool"
+  cluster_name    = "${module.gke.cluster_name}"
+  cluster_zone    = "${module.gke.cluster_zone}"
+  node_tags       = ["tag1", "tag2"]
+  node_pool_count = "3"
 
   node_labels = {
     "key1" = "value1"
