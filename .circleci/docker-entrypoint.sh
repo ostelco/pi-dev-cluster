@@ -14,7 +14,10 @@ if [ $? != 0 ]; then
   exit 1
 else
   echo "Successfully populated /tmp/credentials.json"
+  
+  export GOOGLE_CREDENTIALS=/tmp/credentials.json
   gcloud auth activate-service-account --key-file /tmp/credentials.json
+  
   if [ $? != 0 ]; then
       echo "FAILED to authenticate to Google cloud. Aborting!"
       exit 1
