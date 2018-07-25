@@ -3,5 +3,4 @@
 *.tfstate.backup
 tfstate.*
 .terraform.*
-solution*
 *.json
