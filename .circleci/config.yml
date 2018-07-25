@@ -2,9 +2,9 @@ version: 2
 jobs:
   terraform-plan:
     docker:
-      # this image takes gcloud credentials from an env variable called: GCLOUD_CREDENTIALS and authenticates gcloud with it.
+      # this image takes gcloud credentials from an env variable called: GOOGLE_CREDENTIALS and authenticates gcloud with it.
       # the credentials file is made available inside the container in: /tmp/credentials.json
-    - image: praqma/terraform-gcloud:11.7
+    - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
 
     working_directory: ~/repo
 
@@ -16,15 +16,13 @@ jobs:
         command: |
           terraform init
           terraform plan \
-          -var credentials_path=/tmp/credentials.json \
-          -var cluster_username=$CLUSTER_USERNAME \
           -var cluster_password=$CLUSTER_PASSWORD
 
   terraform-apply:
     docker:
-      # this image takes gcloud credentials from an env variable called: GCLOUD_CREDENTIALS and authenticates gcloud with it.
+      # this image takes gcloud credentials from an env variable called: GOOGLE_CREDENTIALS and authenticates gcloud with it.
       # the credentials file is made available inside the container in: /tmp/credentials.json
-    - image: praqma/terraform-gcloud:11.7
+    - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
 
     working_directory: ~/repo
 
@@ -36,8 +34,6 @@ jobs:
         command: |
           terraform init
           terraform apply --auto-approve  \
-          -var credentials_path=/tmp/credentials.json \
-          -var cluster_username=$CLUSTER_USERNAME \
           -var cluster_password=$CLUSTER_PASSWORD
 
 workflows:
@@ -49,6 +45,7 @@ workflows:
           branches:
             only:
             - master
+            - dev
 
     - hold-before-creating-cluster:
         type: approval
