@@ -4,7 +4,6 @@
 #}
 
 variable "project_name" {
-  type        = "string"
   description = "Google Cloud project ID."
   default     = "pi-ostelco-dev"
 }
@@ -19,6 +18,10 @@ variable "cluster_zone" {
   description = "The zone where the cluster will be created."
 }
 
+variable "cluster_admin_password" {
+  description = "password for cluster admin. Must be at least 16 characters."
+}
+
 # Configure the Google Cloud provider
 provider "google" {
   #  credentials = "${file(var.credentials_path)}"
@@ -28,9 +31,9 @@ provider "google" {
 
 module "gke" {
   source              = "terraform-google-gke-cluster"
-  cluster_password    = "tkj45fyu984ghgw2gfn0786"
-  cluster_name        = "test-cluster"
-  cluster_description = "module example."
+  cluster_password    = "${var.cluster_admin_password}"
+  cluster_name        = "pi-prod"
+  cluster_description = "Production cluster for Ostelco Pi."
   cluster_version     = "1.9.7-gke.3"
   cluster_zone        = "${var.cluster_zone}"
 
@@ -44,13 +47,13 @@ module "np" {
   node_pool_zone = "${module.gke.cluster_zone}"
 
   #cluster_region = "${module.gke.cluster_region}"
-  node_pool_name  = "pool1"
-  node_pool_count = "1"
-  node_tags       = ["tag1", "tag2"]
+  node_pool_name  = "small_nodes_pool"
+  node_pool_count = "2"
+  node_tags       = ["dev"]
 
   node_labels = {
-    "key1" = "value1"
-    "key2" = "value2"
+    "env"         = "prod"
+    "machineType" = "n1-standard-1"
   }
 }
 
@@ -75,6 +78,6 @@ output "cluster_ca_certificate" {
 terraform {
   backend "gcs" {
     bucket = "pi-development-terraform-state"
-    prefix = "clusters/dev/state"
+    prefix = "clusters/prod/state"
   }
 }
