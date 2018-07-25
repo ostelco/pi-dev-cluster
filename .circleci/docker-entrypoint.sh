@@ -1,3 +1,4 @@
+#!/bin/sh
 # populating the json credentials file from env variable
 if [ ! -z "${GOOGLE_CREDENTIALS}" ]; then
   echo $GOOGLE_CREDENTIALS > /tmp/credentials.json
