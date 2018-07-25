@@ -5,11 +5,8 @@ jobs:
       # this image takes gcloud credentials from an env variable called: GOOGLE_CREDENTIALS and authenticates gcloud with it.
       # the credentials file is made available inside the container in: /tmp/credentials.json
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
-      entrypoint: |
-        export GOOGLE_CREDENTIALS=${PI_DEV_GOOGLE_CREDENTIALS}
-        ./docker_entrypoint.sh
-      # environment: 
-      #   GOOGLE_CREDENTIALS: $PI_DEV_GOOGLE_CREDENTIALS
+      environment: 
+        CLUSTER: dev
 
     working_directory: ~/repo
 
@@ -25,11 +22,8 @@ jobs:
   terraform-dev-apply:
     docker:
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
-      entrypoint: |
-        export GOOGLE_CREDENTIALS=${PI_DEV_GOOGLE_CREDENTIALS}
-        ./docker_entrypoint.sh
-      # environment: 
-      #   GOOGLE_CREDENTIALS: $PI_DEV_GOOGLE_CREDENTIALS
+      environment: 
+        CLUSTER: dev
 
     working_directory: ~/repo
 
@@ -46,7 +40,7 @@ jobs:
     docker:
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
       environment: 
-        GOOGLE_CREDENTIALS: $PI_PROD_GOOGLE_CREDENTIALS
+        CLUSTER: prod
 
     working_directory: ~/repo
 
@@ -63,7 +57,7 @@ jobs:
     docker:
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
       environment: 
-        GOOGLE_CREDENTIALS: $PI_PROD_GOOGLE_CREDENTIALS
+        CLUSTER: prod
 
     working_directory: ~/repo
 
