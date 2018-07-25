@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  terraform-plan:
+  terraform-dev-plan:
     docker:
       # this image takes gcloud credentials from an env variable called: GOOGLE_CREDENTIALS and authenticates gcloud with it.
       # the credentials file is made available inside the container in: /tmp/credentials.json
@@ -10,48 +10,88 @@ jobs:
 
     steps:
     - checkout
-      # you may have different input variables needed below. These will be passed from circleci environment variables
     - run:
-        name: running terraform plan
+        name: running terraform plan for dev cluster
         command: |
           terraform init
           terraform plan \
-          -var cluster_password=$CLUSTER_PASSWORD
+          -var cluster_password=$DEV_CLUSTER_PASSWORD
 
-  terraform-apply:
+  terraform-dev-apply:
     docker:
-      # this image takes gcloud credentials from an env variable called: GOOGLE_CREDENTIALS and authenticates gcloud with it.
-      # the credentials file is made available inside the container in: /tmp/credentials.json
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
 
     working_directory: ~/repo
 
     steps:
     - checkout
-      # you may have different input variables needed below. These will be passed from circleci environment variables
     - run:
-        name: running terraform apply
+        name: running terraform apply for dev cluster
         command: |
           terraform init
           terraform apply --auto-approve  \
-          -var cluster_password=$CLUSTER_PASSWORD
+          -var cluster_password=$DEV_CLUSTER_PASSWORD
+
+  terraform-prod-plan:
+    docker:
+    - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
+
+    working_directory: ~/repo
+
+    steps:
+    - checkout
+    - run:
+        name: running terraform plan for prod cluster
+        command: |
+          terraform init
+          terraform plan \
+          -var cluster_password=$PROD_CLUSTER_PASSWORD
+
+  terraform-apply:
+    docker:
+    - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
+
+    working_directory: ~/repo
+
+    steps:
+    - checkout
+    - run:
+        name: running terraform apply for prod cluster
+        command: |
+          terraform init
+          terraform apply --auto-approve  \
+          -var cluster_password=$PROD_CLUSTER_PASSWORD        
 
 workflows:
   version: 2
   clusters-plan-approve-and-deploy:
     jobs:
-    - terraform-plan:
+    - terraform-dev-plan:
+        filters:
+          branches:
+            only:
+            - dev
+
+    - hold-before-creating-dev-cluster:
+        type: approval
+        requires:
+        - terraform-dev-plan
+
+    - terraform-dev-apply:
+        requires:
+        - hold-before-creating-dev-cluster
+
+    - terraform-prod-plan:
         filters:
           branches:
             only:
             - master
-            - dev
 
-    - hold-before-creating-cluster:
+    - hold-before-creating-prod-cluster:
         type: approval
         requires:
-        - terraform-plan
+        - terraform-prod-plan
 
-    - terraform-apply:
+    - terraform-prod-apply:
         requires:
-        - hold-before-creating-cluster
+        - hold-before-creating-prod-cluster    
