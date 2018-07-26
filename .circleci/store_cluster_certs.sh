@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # This script extracts the keys/certs needed to authenticate to the cluster endpoint
 # These secrets are needed when configuring kubectl manually (without the magical gcloud command)
 # They will be used by Helmsman to connect to the cluster, and therefore need to be always updated in the GCS bucket
