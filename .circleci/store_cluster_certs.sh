@@ -10,10 +10,9 @@
 BUCKET=gs://pi-ostelco-dev-k8s-key-store
 
 # defining the prefix that identifies which cluster the keys belong to.
-if [ "$CLUSTER" = "dev" ]; then
-   prefix="dev_cluster_"
-elif [ "$CLUSTER" = "prod" ]; then
-   prefix="prod_cluster_"
+prefix="dev_cluster"
+if [ "$CLUSTER" = "prod" ]; then
+   prefix="prod_cluster"
 fi
 
 
@@ -21,26 +20,24 @@ fi
 echo "Importing keys from terraform into local files for [ $CLUSTER ] cluster ... "
 
 mkdir keys
-echo $(terraform output "$prefix"client_certificate) | base64 -d > keys/"$prefix"client_certificate.crt
-echo $(terraform output "$prefix"client_key) | base64 -d > keys/"$prefix"client_key.key
-echo $(terraform output "$prefix"cluster_ca_certificate) | base64 -d > keys/"$prefix"cluster_ca.crt
+echo $(terraform output ${prefix}_client_certificate) | base64 -d > keys/${prefix}_client_certificate.crt
+echo $(terraform output ${prefix}_client_key) | base64 -d > keys/${prefix}_client_key.key
+echo $(terraform output ${prefix}_ca_certificate) | base64 -d > keys/${prefix}_cluster_ca.crt
 
 # push secrets to GCS and cleanup the local file system
-if [[ -s keys/"$prefix"client_certificate.crt && -s keys/"$prefix"client_key.key && -s keys/"$prefix"ca.crt ]];then
-  echo "Pushing keys to GCS ... "
-  if ! gsutil cp -r keys  ${BUCKET}; then
+if [[ -r keys/${prefix}_client_certificate.crt ]] && [[ -r keys/${prefix}_client_key.key ]] && [[ -r keys/${prefix}_cluster_ca.crt ]];then
+  echo "Keys found. Pushing keys to GCS ... "
+  gsutil cp -r keys  ${BUCKET}
+  if [ $? -ne 0 ] ; then
+    echo "Could not copy keys to GCS bucket."
     exit 1
   else
     echo "Cleaning up local file system ... "
-    if ! rm -r keys; then
-      echo "Something went wrong during the local file system cleanup. Please clean it up manually."
-    else
-      echo "Pushed [ $CLUSTER ] cluster keys successfully to GCS and cleaned local file system."
-    fi
+    rm -fr keys && echo "Keys cleanup complete." || echo "Something went wrong during keys cleanup."
   fi
 
 else
-  echo "Something went wrong with reading terraform output variables! The files (or some of them) are empty. Deleting local files and aborting!"
-  rm -r keys
+  echo "Something went wrong with reading terraform output variables! The files (or some of them) are empty. Deleting local keys directory, and aborting!"
+  rm -fr keys
   exit 1
 fi
