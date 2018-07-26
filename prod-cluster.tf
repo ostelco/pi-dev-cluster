@@ -68,9 +68,10 @@ output "prod_cluster_ca_certificate" {
 
 # the backend config for storing terraform state in GCS 
 # requires setting GOOGLE_CREDNETIALS to contain the path to your Google Cloud service account json key.
+# The bucket below should exist in the ostelco prod Google project
 terraform {
   backend "gcs" {
-    bucket = "pi-development-terraform-state"
+    bucket = "pi-ostelco-prod-terraform-state"
     prefix = "clusters/prod/state"
   }
 }
