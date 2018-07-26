@@ -19,7 +19,7 @@ jobs:
           /docker-entrypoint.sh
           terraform init
           terraform plan \
-          -var cluster_password=$DEV_CLUSTER_PASSWORD
+          -var cluster_admin_password=$DEV_CLUSTER_PASSWORD
 
   terraform-dev-apply:
     docker:
@@ -38,7 +38,7 @@ jobs:
           /docker-entrypoint.sh
           terraform init
           terraform apply --auto-approve  \
-          -var cluster_password=$DEV_CLUSTER_PASSWORD
+          -var cluster_admin_password=$DEV_CLUSTER_PASSWORD
 
   terraform-prod-plan:
     docker:
@@ -54,9 +54,10 @@ jobs:
     - run:
         name: running terraform plan for prod cluster
         command: |
+          /docker-entrypoint.sh
           terraform init
           terraform plan \
-          -var cluster_password=$PROD_CLUSTER_PASSWORD
+          -var cluster_admin_password=$PROD_CLUSTER_PASSWORD
 
   terraform-prod-apply:
     docker:
@@ -72,9 +73,10 @@ jobs:
     - run:
         name: running terraform apply for prod cluster
         command: |
+          /docker-entrypoint.sh
           terraform init
           terraform apply --auto-approve  \
-          -var cluster_password=$PROD_CLUSTER_PASSWORD        
+          -var cluster_admin_password=$PROD_CLUSTER_PASSWORD        
 
 workflows:
   version: 2
