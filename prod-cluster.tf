@@ -1,8 +1,3 @@
-#variable "credentials_path" {
-#  type        = "string"
-#  description = "the path to your Google Cloud json credentials file."
-#}
-
 variable "project_name" {
   description = "Google Cloud project ID."
   default     = "pi-ostelco-dev"
@@ -47,9 +42,9 @@ module "np" {
   node_pool_zone = "${module.gke.cluster_zone}"
 
   #cluster_region = "${module.gke.cluster_region}"
-  node_pool_name  = "small_nodes_pool"
+  node_pool_name  = "small-nodes-pool"
   node_pool_count = "2"
-  node_tags       = ["dev"]
+  node_tags       = ["prod"]
 
   node_labels = {
     "env"         = "prod"
@@ -57,19 +52,19 @@ module "np" {
   }
 }
 
-output "cluster_endpoint" {
+output "prod_cluster_endpoint" {
   value = "${module.gke.cluster_endpoint}"
 }
 
-output "cluster_client_certificate" {
+output "prod_cluster_client_certificate" {
   value = "${module.gke.cluster_client_certificate}"
 }
 
-output "cluster_client_key" {
+output "prod_cluster_client_key" {
   value = "${module.gke.cluster_client_key}"
 }
 
-output "cluster_ca_certificate" {
+output "prod_cluster_ca_certificate" {
   value = "${module.gke.cluster_ca_certificate}"
 }
 

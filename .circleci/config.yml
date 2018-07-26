@@ -5,6 +5,9 @@ jobs:
       # this image takes gcloud credentials from an env variable called: GOOGLE_CREDENTIALS and authenticates gcloud with it.
       # the credentials file is made available inside the container in: /tmp/credentials.json
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
+      environment: 
+        CLUSTER: dev
+        GOOGLE_CREDENTIALS: /tmp/credentials.json
 
     working_directory: ~/repo
 
@@ -13,13 +16,16 @@ jobs:
     - run:
         name: running terraform plan for dev cluster
         command: |
+          /docker-entrypoint.sh
           terraform init
           terraform plan \
-          -var cluster_password=$DEV_CLUSTER_PASSWORD
-
+          -var cluster_admin_password=$DEV_CLUSTER_PASSWORD
   terraform-dev-apply:
     docker:
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
+      environment: 
+        CLUSTER: dev
+        GOOGLE_CREDENTIALS: /tmp/credentials.json
 
     working_directory: ~/repo
 
@@ -28,13 +34,18 @@ jobs:
     - run:
         name: running terraform apply for dev cluster
         command: |
+          /docker-entrypoint.sh
           terraform init
           terraform apply --auto-approve  \
-          -var cluster_password=$DEV_CLUSTER_PASSWORD
-
+          -var cluster_admin_password=$DEV_CLUSTER_PASSWORD
+          chmod +x .circleci/store_cluster_certs.sh 
+          .circleci/store_cluster_certs.sh 
   terraform-prod-plan:
     docker:
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
+      environment: 
+        CLUSTER: prod
+        GOOGLE_CREDENTIALS: /tmp/credentials.json
 
     working_directory: ~/repo
 
@@ -43,13 +54,16 @@ jobs:
     - run:
         name: running terraform plan for prod cluster
         command: |
+          /docker-entrypoint.sh
           terraform init
           terraform plan \
-          -var cluster_password=$PROD_CLUSTER_PASSWORD
-
-  terraform-apply:
+          -var cluster_admin_password=$PROD_CLUSTER_PASSWORD
+  terraform-prod-apply:
     docker:
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
+      environment: 
+        CLUSTER: prod
+        GOOGLE_CREDENTIALS: /tmp/credentials.json
 
     working_directory: ~/repo
 
@@ -58,10 +72,12 @@ jobs:
     - run:
         name: running terraform apply for prod cluster
         command: |
+          /docker-entrypoint.sh
           terraform init
           terraform apply --auto-approve  \
-          -var cluster_password=$PROD_CLUSTER_PASSWORD        
-
+          -var cluster_admin_password=$PROD_CLUSTER_PASSWORD 
+          chmod +x .circleci/store_cluster_certs.sh 
+          .circleci/store_cluster_certs.sh       
 workflows:
   version: 2
   clusters-plan-approve-and-deploy:
@@ -94,4 +110,4 @@ workflows:
 
     - terraform-prod-apply:
         requires:
-        - hold-before-creating-prod-cluster    
+        - hold-before-creating-prod-cluster
