@@ -57,19 +57,19 @@ module "np" {
   }
 }
 
-output "cluster_endpoint" {
+output "dev_cluster_endpoint" {
   value = "${module.gke.cluster_endpoint}"
 }
 
-output "cluster_client_certificate" {
+output "dev_cluster_client_certificate" {
   value = "${module.gke.cluster_client_certificate}"
 }
 
-output "cluster_client_key" {
+output "dev_cluster_client_key" {
   value = "${module.gke.cluster_client_key}"
 }
 
-output "cluster_ca_certificate" {
+output "dev_cluster_ca_certificate" {
   value = "${module.gke.cluster_ca_certificate}"
 }
 

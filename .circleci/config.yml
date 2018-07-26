@@ -39,6 +39,7 @@ jobs:
           terraform init
           terraform apply --auto-approve  \
           -var cluster_admin_password=$DEV_CLUSTER_PASSWORD
+          .circleci/store_cluster_certs.sh 
 
   terraform-prod-plan:
     docker:
@@ -76,7 +77,8 @@ jobs:
           /docker-entrypoint.sh
           terraform init
           terraform apply --auto-approve  \
-          -var cluster_admin_password=$PROD_CLUSTER_PASSWORD        
+          -var cluster_admin_password=$PROD_CLUSTER_PASSWORD 
+          .circleci/store_cluster_certs.sh       
 
 workflows:
   version: 2
