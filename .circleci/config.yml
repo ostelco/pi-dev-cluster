@@ -8,6 +8,7 @@ jobs:
       environment: 
         CLUSTER: dev
         GOOGLE_CREDENTIALS: /tmp/credentials.json
+      entrypoint: cd / && ./docker-entrypoint.sh  
 
     working_directory: ~/repo
 
@@ -26,6 +27,7 @@ jobs:
       environment: 
         CLUSTER: dev
         GOOGLE_CREDENTIALS: /tmp/credentials.json
+      entrypoint: cd / && ./docker-entrypoint.sh  
 
     working_directory: ~/repo
 
