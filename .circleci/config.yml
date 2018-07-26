@@ -20,6 +20,8 @@ jobs:
           terraform init
           terraform plan \
           -var cluster_admin_password=$DEV_CLUSTER_PASSWORD
+          pwd
+          ls
 
   terraform-dev-apply:
     docker:
@@ -60,9 +62,7 @@ jobs:
           terraform init
           terraform plan \
           -var cluster_admin_password=$PROD_CLUSTER_PASSWORD
-          pwd
-          ls
-          
+
 
   terraform-prod-apply:
     docker:
