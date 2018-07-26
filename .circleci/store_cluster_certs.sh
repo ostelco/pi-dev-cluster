@@ -7,7 +7,12 @@
 # This script will be executed as part of the circleci workflow after terraform cluster script is applied.
 
 # defining the bucket where the secrets are stored.
-BUCKET=gs://pi-ostelco-dev-k8s-key-store
+GCS_BUCKET=gs://pi-ostelco-dev-k8s-key-store
+
+if [ -z $K8S_KEY_STORE_BUCKET ]; then 
+  GCS_BUCKET=${K8S_KEY_STORE_BUCKET}
+fi
+
 
 # defining the prefix that identifies which cluster the keys belong to.
 prefix="dev_cluster"
@@ -27,7 +32,7 @@ echo $(terraform output ${prefix}_ca_certificate) | base64 -d > keys/${prefix}_c
 # push secrets to GCS and cleanup the local file system
 if [[ -r keys/${prefix}_client_certificate.crt ]] && [[ -r keys/${prefix}_client_key.key ]] && [[ -r keys/${prefix}_cluster_ca.crt ]];then
   echo "Keys found. Pushing keys to GCS ... "
-  gsutil cp -r keys  ${BUCKET}
+  gsutil cp -r keys  ${GCS_BUCKET}
   if [ $? -ne 0 ] ; then
     echo "Could not copy keys to GCS bucket."
     exit 1
