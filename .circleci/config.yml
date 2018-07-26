@@ -16,7 +16,7 @@ jobs:
     - run:
         name: running terraform plan for dev cluster
         command: |
-          # /docker-entrypoint.sh
+          /docker-entrypoint.sh
           terraform init
           terraform plan \
           -var cluster_admin_password=$DEV_CLUSTER_PASSWORD
@@ -35,7 +35,7 @@ jobs:
     - run:
         name: running terraform apply for dev cluster
         command: |
-          # /docker-entrypoint.sh
+          /docker-entrypoint.sh
           terraform init
           terraform apply --auto-approve  \
           -var cluster_admin_password=$DEV_CLUSTER_PASSWORD
