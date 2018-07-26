@@ -7,6 +7,7 @@ jobs:
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
       environment: 
         CLUSTER: dev
+        GOOGLE_CREDENTIALS: /tmp/credentials.json
 
     working_directory: ~/repo
 
@@ -24,6 +25,7 @@ jobs:
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
       environment: 
         CLUSTER: dev
+        GOOGLE_CREDENTIALS: /tmp/credentials.json
 
     working_directory: ~/repo
 
@@ -41,6 +43,7 @@ jobs:
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
       environment: 
         CLUSTER: prod
+        GOOGLE_CREDENTIALS: /tmp/credentials.json
 
     working_directory: ~/repo
 
@@ -58,6 +61,7 @@ jobs:
     - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
       environment: 
         CLUSTER: prod
+        GOOGLE_CREDENTIALS: /tmp/credentials.json
 
     working_directory: ~/repo
 
