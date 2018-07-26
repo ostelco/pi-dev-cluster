@@ -8,7 +8,6 @@ jobs:
       environment: 
         CLUSTER: dev
         GOOGLE_CREDENTIALS: /tmp/credentials.json
-      entrypoint: /docker-entrypoint.sh  
 
     working_directory: ~/repo
 
@@ -17,6 +16,7 @@ jobs:
     - run:
         name: running terraform plan for dev cluster
         command: |
+          /docker-entrypoint.sh
           terraform init
           terraform plan \
           -var cluster_password=$DEV_CLUSTER_PASSWORD
@@ -27,7 +27,6 @@ jobs:
       environment: 
         CLUSTER: dev
         GOOGLE_CREDENTIALS: /tmp/credentials.json
-      entrypoint: /docker-entrypoint.sh  
 
     working_directory: ~/repo
 
@@ -36,6 +35,7 @@ jobs:
     - run:
         name: running terraform apply for dev cluster
         command: |
+          /docker-entrypoint.sh
           terraform init
           terraform apply --auto-approve  \
           -var cluster_password=$DEV_CLUSTER_PASSWORD
