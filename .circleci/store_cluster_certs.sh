@@ -9,7 +9,7 @@
 # defining the bucket where the secrets are stored.
 GCS_BUCKET=gs://pi-ostelco-dev-k8s-key-store
 
-if [ -z $K8S_KEY_STORE_BUCKET ]; then 
+if [ ! -z $K8S_KEY_STORE_BUCKET ]; then 
   GCS_BUCKET=${K8S_KEY_STORE_BUCKET}
 fi
 
