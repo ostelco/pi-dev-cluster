@@ -1,8 +1,3 @@
-#variable "credentials_path" {
-#  type        = "string"
-#  description = "the path to your Google Cloud json credentials file."
-#}
-
 variable "project_name" {
   description = "Google Cloud project ID."
   default     = "pi-ostelco-dev"
@@ -24,13 +19,12 @@ variable "cluster_admin_password" {
 
 # Configure the Google Cloud provider
 provider "google" {
-  #  credentials = "${file(var.credentials_path)}"
   project = "${var.project_name}"
   region  = "${var.cluster_region}"
 }
 
 module "gke" {
-  source              = "terraform-google-gke-cluster"
+  source              = "github.com/ostelco/ostelco-terraform-modules//terraform-google-gke-cluster"
   cluster_password    = "${var.cluster_admin_password}"
   cluster_name        = "pi-dev"
   cluster_description = "Development cluster for Ostelco Pi."
@@ -42,11 +36,10 @@ module "gke" {
 }
 
 module "np" {
-  source         = "terraform-google-gke-node-pool"
+  source         = "github.com/ostelco/ostelco-terraform-modules//terraform-google-gke-node-pool"
   cluster_name   = "${module.gke.cluster_name}"
   node_pool_zone = "${module.gke.cluster_zone}"
 
-  #cluster_region = "${module.gke.cluster_region}"
   node_pool_name  = "small-nodes-pool"
   node_pool_count = "2"
   node_tags       = ["dev"]
