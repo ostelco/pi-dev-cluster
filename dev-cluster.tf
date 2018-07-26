@@ -47,7 +47,7 @@ module "np" {
   node_pool_zone = "${module.gke.cluster_zone}"
 
   #cluster_region = "${module.gke.cluster_region}"
-  node_pool_name  = "small_nodes_pool"
+  node_pool_name  = "small-nodes-pool"
   node_pool_count = "2"
   node_tags       = ["dev"]
 
