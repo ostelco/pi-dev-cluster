@@ -10,14 +10,14 @@
 prefix="dev_cluster"
 # defining the bucket where the secrets are stored.
 GCS_BUCKET=gs://pi-ostelco-dev-k8s-key-store
-if [ ! -z $PI_DEV_K8S_KEY_STORE_BUCKET ]; then 
+if [ ! -z ${PI_DEV_K8S_KEY_STORE_BUCKET} ]; then 
   GCS_BUCKET=${PI_DEV_K8S_KEY_STORE_BUCKET}
 fi
 
 if [ "$CLUSTER" = "prod" ]; then
    prefix="prod_cluster"
    GCS_BUCKET=gs://pi-ostelco-prod-k8s-key-store
-   if [ ! -z $PI_PROD_K8S_KEY_STORE_BUCKET ]; then 
+   if [ ! -z ${PI_PROD_K8S_KEY_STORE_BUCKET} ]; then 
       GCS_BUCKET=${PI_PROD_K8S_KEY_STORE_BUCKET}
    fi
 fi
