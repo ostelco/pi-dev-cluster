@@ -70,7 +70,7 @@ output "dev_cluster_ca_certificate" {
 # requires setting GOOGLE_CREDNETIALS to contain the path to your Google Cloud service account json key.
 terraform {
   backend "gcs" {
-    bucket = "pi-development-terraform-state"
+    bucket = "pi-ostelco-dev-terraform-state"
     prefix = "clusters/dev/state"
   }
 }
