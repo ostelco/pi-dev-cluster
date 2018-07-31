@@ -40,9 +40,9 @@ module "np" {
   cluster_name   = "${module.gke.cluster_name}"
   node_pool_zone = "${module.gke.cluster_zone}"
 
-  node_pool_name  = "small-nodes-pool"
-  node_pool_count = "2"
-  node_tags       = ["dev"]
+  node_pool_name         = "small-nodes-pool"
+  initial_node_pool_size = "2"
+  node_tags              = ["dev"]
 
   node_labels = {
     "env"         = "dev"
