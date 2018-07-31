@@ -6,18 +6,21 @@
 
 # This script will be executed as part of the circleci workflow after terraform cluster script is applied.
 
-# defining the bucket where the secrets are stored.
-GCS_BUCKET=gs://pi-ostelco-dev-k8s-key-store
-
-if [ ! -z $K8S_KEY_STORE_BUCKET ]; then 
-  GCS_BUCKET=${K8S_KEY_STORE_BUCKET}
-fi
-
 
 # defining the prefix that identifies which cluster the keys belong to.
 prefix="dev_cluster"
+# defining the bucket where the secrets are stored.
+GCS_BUCKET=gs://pi-ostelco-dev-k8s-key-store
+if [ ! -z ${PI_DEV_K8S_KEY_STORE_BUCKET} ]; then 
+  GCS_BUCKET=${PI_DEV_K8S_KEY_STORE_BUCKET}
+fi
+
 if [ "$CLUSTER" = "prod" ]; then
    prefix="prod_cluster"
+   GCS_BUCKET=gs://pi-ostelco-prod-k8s-key-store
+   if [ ! -z ${PI_PROD_K8S_KEY_STORE_BUCKET} ]; then 
+      GCS_BUCKET=${PI_PROD_K8S_KEY_STORE_BUCKET}
+   fi
 fi
 
 
