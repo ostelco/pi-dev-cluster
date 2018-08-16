@@ -52,7 +52,7 @@ module "np" {
   }
 }
 
-module "np" {
+module "np1" {
   source         = "github.com/ostelco/ostelco-terraform-modules//terraform-google-gke-node-pool"
   cluster_name   = "${module.gke.cluster_name}"
   node_pool_zone = "${module.gke.cluster_zone}"
