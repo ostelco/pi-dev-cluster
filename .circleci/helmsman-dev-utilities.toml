@@ -24,8 +24,6 @@ storageBackend = "secret" # default is configMap
 # [namespaces.<your namespace>] -- whitespace before this entry does not matter, use whatever indentation style you like 
  # protected = <true or false> -- default to false 
 [namespaces]
-  [namespaces.kube-system]
-  protected = true
   [namespaces.neo4j]
 
 
