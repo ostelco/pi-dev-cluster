@@ -16,7 +16,7 @@ jobs:
     - run:
         name: running terraform plan for dev cluster
         command: |
-          /docker-entrypoint.sh
+          /docker-entrypoint.sh 
           terraform init
           terraform plan \
           -var cluster_admin_password=$DEV_CLUSTER_PASSWORD
@@ -41,6 +41,19 @@ jobs:
           -var cluster_admin_password=$DEV_CLUSTER_PASSWORD
           chmod +x .circleci/store_cluster_certs.sh 
           .circleci/store_cluster_certs.sh 
+
+  deploy-dev-utilities: 
+    docker:
+    - image: praqma/helmsman:test-1.4.0
+
+    working_directory: ~/repo
+
+    steps:
+    - checkout
+    - run:
+        name: deploying utilities/dependencies to dev cluster with Helmsman
+        command: |       
+          helmsman --debug --apply -f helmsman-dev-utilities.toml 
 
   terraform-prod-plan:
     docker:
@@ -93,14 +106,17 @@ workflows:
             only:
             - dev
 
-    - hold-before-creating-dev-cluster:
+    - hold-before-updating-dev-cluster:
         type: approval
         requires:
         - terraform-dev-plan
 
     - terraform-dev-apply:
         requires:
-        - hold-before-creating-dev-cluster
+        - hold-before-updating-dev-cluster
+    - deploy-dev-utilities:
+        requires:
+          - terraform-dev-apply   
 
     - terraform-prod-plan:
         filters:
@@ -108,11 +124,11 @@ workflows:
             only:
             - master
 
-    - hold-before-creating-prod-cluster:
+    - hold-before-updating-prod-cluster:
         type: approval
         requires:
         - terraform-prod-plan
 
     - terraform-prod-apply:
         requires:
-        - hold-before-creating-prod-cluster    
+        - hold-before-updating-prod-cluster    
