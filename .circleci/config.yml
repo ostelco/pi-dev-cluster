@@ -61,7 +61,8 @@ jobs:
     - run:
         name: deploying utilities/dependencies to dev cluster with Helmsman
         command: | 
-          export GOOGLE_APPLICATION_CREDENTIALS=${PI_DEV_GOOGLE_CREDENTIALS}
+          echo $PI_DEV_GOOGLE_CREDENTIALS > /tmp/credentials.json
+          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/credentials.json
           export PI_DEV_K8S_ENDPOINT=https://$(cat endpoint.txt)
           cd .circleci      
           helmsman --debug --apply -f helmsman-dev-utilities.toml 
