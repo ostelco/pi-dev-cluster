@@ -42,6 +42,11 @@ jobs:
           chmod +x .circleci/store_cluster_certs.sh 
           .circleci/store_cluster_certs.sh 
 
+    - persist_to_workspace:
+          root: ~/repo/
+          paths:
+            - endpoint.txt      
+
   deploy-dev-utilities: 
     docker:
     - image: praqma/helmsman:test-1.4.0
@@ -50,9 +55,15 @@ jobs:
 
     steps:
     - checkout
+    - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ~/repo  
     - run:
         name: deploying utilities/dependencies to dev cluster with Helmsman
-        command: |       
+        command: | 
+          export GOOGLE_APPLICATION_CREDENTIALS=${PI_DEV_GOOGLE_CREDENTIALS}
+          export PI_DEV_K8S_ENDPOINT=$(cat endpoint.txt)
+          cd .circleci      
           helmsman --debug --apply -f helmsman-dev-utilities.toml 
 
   terraform-prod-plan:
