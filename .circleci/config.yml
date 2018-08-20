@@ -67,47 +67,7 @@ jobs:
           cd .circleci      
           helmsman --debug --apply -f helmsman-dev-utilities.toml 
 
-  terraform-prod-plan:
-    docker:
-    - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
-      environment: 
-        CLUSTER: prod
-        GOOGLE_CREDENTIALS: /tmp/credentials.json
-
-    working_directory: ~/repo
-
-    steps:
-    - checkout
-    - run:
-        name: running terraform plan for prod cluster
-        command: |
-          /docker-entrypoint.sh
-          terraform init
-          terraform plan \
-          -var cluster_admin_password=$PROD_CLUSTER_PASSWORD
-
-
-  terraform-prod-apply:
-    docker:
-    - image: eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
-      environment: 
-        CLUSTER: prod
-        GOOGLE_CREDENTIALS: /tmp/credentials.json
-
-    working_directory: ~/repo
-
-    steps:
-    - checkout
-    - run:
-        name: running terraform apply for prod cluster
-        command: |
-          /docker-entrypoint.sh
-          terraform init
-          terraform apply --auto-approve  \
-          -var cluster_admin_password=$PROD_CLUSTER_PASSWORD 
-          chmod +x .circleci/store_cluster_certs.sh 
-          .circleci/store_cluster_certs.sh       
-
+  
 workflows:
   version: 2
   clusters-plan-approve-and-deploy:
@@ -116,7 +76,7 @@ workflows:
         filters:
           branches:
             only:
-            - dev
+            - master
 
     - hold-before-updating-dev-cluster:
         type: approval
@@ -126,21 +86,7 @@ workflows:
     - terraform-dev-apply:
         requires:
         - hold-before-updating-dev-cluster
+
     - deploy-dev-utilities:
         requires:
-          - terraform-dev-apply   
-
-    - terraform-prod-plan:
-        filters:
-          branches:
-            only:
-            - master
-
-    - hold-before-updating-prod-cluster:
-        type: approval
-        requires:
-        - terraform-prod-plan
-
-    - terraform-prod-apply:
-        requires:
-        - hold-before-updating-prod-cluster    
+          - terraform-dev-apply      
