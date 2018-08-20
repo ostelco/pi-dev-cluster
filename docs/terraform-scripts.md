@@ -11,14 +11,13 @@ An [example](https://github.com/ostelco/ostelco-terraform-modules/blob/master/ex
 
 ## Terraform scripts
 
-The **PROD** cluster terraform config is available in the `master`branch in a file called `prod-cluster.tf`. 
-
 The **DEV** cluster terraform config is available in the `dev`branch in a file called `dev-cluster.tf`. 
+
+> The TF file name can be changed to anything else. It also can be split to multiple files (e.g, variables.tf & outputs.tf & main.tf)
 
 ## Terraform state
 
 The terraform state files are stored in Google buckets. 
 
 - For the **DEV** cluster: it is stored in a bucket called: `pi-ostelco-dev-terraform-state` in the `pi-ostelco-dev` project.
-- For the **PROD** cluster: it is stored in a bucket called: `pi-ostelco-prod-terraform-state` in the `pi-ostelco-prod` project.
 

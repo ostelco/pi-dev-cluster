@@ -1,19 +1,12 @@
 # Circleci Pipeline
 
-The pipeline manages the GKE clusters for both **DEV** and **PROD** environments.
+The pipeline manages the GKE clusters for the **DEV** environment.
 
 ## Google Projects
 
 For complete separation and better access control, the **DEV** and **PROD** clusters are created in two different Google cloud projects. Namely, `pi-ostelco-dev` & `pi-ostelco-prod`.
 
 The production cluster (and it's project) will only be accessible by admins or other team members who are delegated to cover for admins.
-
-## Branches
-
-There are two long lived branches (they are not meant to be merged): 
-
-- dev : the **DEV** cluster is managed from this branch
-- master : the **PROD** cluster is managed from this branch.
 
 ## Circleci config
 
@@ -44,8 +37,5 @@ It is created and pushed to Google Container Registry (GCR) manually. The image 
 | variable                     | description                                                                                                                                                                                                  | optional |
 |------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | PI_DEV_GOOGLE_CREDENTIALS    | Google cloud service account credentials from the **pi-ostelco-dev** project which has the following permissions: Compute Instance Admin (v1), Kubernetes Engine Admin, Service Account User, Storage Object Admin  | No       |
-| PI_PROD_GOOGLE_CREDENTIALS   | Google cloud service account credentials from the **pi-ostelco-prod** project which has the following permissions: Compute Instance Admin (v1), Kubernetes Engine Admin, Service Account User, Storage Object Admin | No       |
 | DEV_CLUSTER_PASSWORD         | the admin password for the DEV cluster                                                                                                                                                                      | No       |
-| PROD_CLUSTER_PASSWORD        | the admin password for the PROD cluster                                                                                                                                                                     | No       |
 | PI_DEV_K8S_KEY_STORE_BUCKET  | The bucket for storing DEV cluster certificates and keys. The format is: `gs://bucket-name`. The bucket should pre-exist in the **pi-ostelco-dev** project. If not specified, the default is: `gs://pi-ostelco-dev-k8s-key-store`                    | Yes      |
-| PI_PROD_K8S_KEY_STORE_BUCKET | The bucket for storing PROD cluster certificates and keys. The format is: `gs://bucket-name`.The bucket should pre-exist in the **pi-ostelco-prod** project. If not specified, the default is: `gs://pi-ostelco-prod-k8s-key-store`                   | Yes      |
