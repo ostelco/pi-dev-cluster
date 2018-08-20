@@ -30,6 +30,7 @@ mkdir keys
 echo $(terraform output ${prefix}_client_certificate) | base64 -d > keys/${prefix}_client_certificate.crt
 echo $(terraform output ${prefix}_client_key) | base64 -d > keys/${prefix}_client_key.key
 echo $(terraform output ${prefix}_ca_certificate) | base64 -d > keys/${prefix}_cluster_ca.crt
+echo $(terraform output ${prefix}_endpoint) > endpoint.txt
 
 # push secrets to GCS and cleanup the local file system
 if [[ -r keys/${prefix}_client_certificate.crt ]] && [[ -r keys/${prefix}_client_key.key ]] && [[ -r keys/${prefix}_cluster_ca.crt ]];then
