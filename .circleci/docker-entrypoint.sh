@@ -15,6 +15,12 @@
 ##        isn't.
 ##
 
+if [[ -z "$(type gcloud)" ]] ; then
+    echo "No 'gcloud' in path, bailing out."
+    exit 1
+fi
+
+
 TEMP_CREDENTIALS_FILE=/tmp/credentials.json
 
 # Populate the temporary credentials file
@@ -41,4 +47,3 @@ fi
 echo "Executing command as authenticated into google cloud: $@"
 
 exec "$@"
-
