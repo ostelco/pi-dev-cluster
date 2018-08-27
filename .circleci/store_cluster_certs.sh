@@ -10,33 +10,37 @@
 prefix="dev_cluster"
 # defining the bucket where the secrets are stored.
 GCS_BUCKET=gs://pi-ostelco-dev-k8s-key-store
-if [ ! -z ${PI_DEV_K8S_KEY_STORE_BUCKET} ]; then 
+if [[ ! -z ${PI_DEV_K8S_KEY_STORE_BUCKET} ]] ; then
   GCS_BUCKET=${PI_DEV_K8S_KEY_STORE_BUCKET}
 fi
 
-if [ "$CLUSTER" = "prod" ]; then
+if [[ "$CLUSTER" = "prod" ]]; then
    prefix="prod_cluster"
    GCS_BUCKET=gs://pi-ostelco-prod-k8s-key-store
-   if [ ! -z ${PI_PROD_K8S_KEY_STORE_BUCKET} ]; then 
+   if [ ! -z ${PI_PROD_K8S_KEY_STORE_BUCKET} ]] ; then
       GCS_BUCKET=${PI_PROD_K8S_KEY_STORE_BUCKET}
    fi
 fi
 
 
-# saving the scecrets into files
+# saving the scecrets into files in the "keys" subdirectory
 echo "Importing keys from terraform into local files for [ $CLUSTER ] cluster ... "
 
+CLIENT_CERT="keys/${prefix}_client_certificate.crt"
+CLIENT_KEY="keys/${prefix}_client_key.key"
+CLUSTER_CERT="keys/${prefix}_cluster_ca.crt"
+
 mkdir keys
-echo $(terraform output ${prefix}_client_certificate) | base64 -d > keys/${prefix}_client_certificate.crt
-echo $(terraform output ${prefix}_client_key) | base64 -d > keys/${prefix}_client_key.key
-echo $(terraform output ${prefix}_ca_certificate) | base64 -d > keys/${prefix}_cluster_ca.crt
+echo $(terraform output ${prefix}_client_certificate) | base64 -d > $CLIENT_CERT
+echo $(terraform output ${prefix}_client_key) | base64 -d > $CLIENT_KEY
+echo $(terraform output ${prefix}_ca_certificate) | base64 -d > $CLUSTER_CERT
 echo $(terraform output ${prefix}_endpoint) > endpoint.txt
 
 # push secrets to GCS and cleanup the local file system
-if [[ -r keys/${prefix}_client_certificate.crt ]] && [[ -r keys/${prefix}_client_key.key ]] && [[ -r keys/${prefix}_cluster_ca.crt ]];then
+if [[ -r $CLIENT_CERT ]] && [[ -r $CLIENT_KEY ]] && [[ -r $CLUSTER_CERT]] ; then
   echo "Keys found. Pushing keys to GCS ... "
   gsutil cp -r keys  ${GCS_BUCKET}
-  if [ $? -ne 0 ] ; then
+  if [[ $? -ne 0 ]] ; then
     echo "Could not copy keys to GCS bucket."
     exit 1
   else
