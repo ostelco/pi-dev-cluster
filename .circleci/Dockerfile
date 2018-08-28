@@ -1,5 +1,13 @@
 FROM golang:alpine as builder
 
+##
+##  THIS DOCKERFILE describes a container that provides gcloud and
+##  terraform, and is used by the circleci server to mutate cluster
+##  state.  The image is stored in eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
+##  where the tag is the terraform version (currently 11.7).
+##
+
+
 ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin:/go/src/github.com/hashicorp/terraform
 
 RUN apk --no-cache add \
@@ -18,9 +26,9 @@ RUN apk --no-cache add \
     && gcloud --version
 
 
-
-# apk does not have the latest version of terraform
-#RUN apk --update add terraform=0.11.1-r0
+# apk (the package manager for Alpine)
+# does not have the latest version of terraform so therefore we
+# build terraform from source.
 
 ENV TERRAFORM_VERSION=0.11.7
 
@@ -40,7 +48,6 @@ RUN apk --no-cache add python ca-certificates git
 
 COPY --from=builder go/src/github.com/hashicorp/terraform /usr/local/terraform
 COPY --from=builder /usr/local/gcloud /usr/local/gcloud
-
 
 
 # Copy docker-entrypoint.sh to inject sensitive info into the credentials file from environment variables
