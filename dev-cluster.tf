@@ -36,22 +36,6 @@ module "gke" {
   #cluster_additional_zones = ["europe-west1-b"]
 }
 
-module "np" {
-  source         = "github.com/ostelco/ostelco-terraform-modules//terraform-google-gke-node-pool"
-  cluster_name   = "${module.gke.cluster_name}"
-  node_pool_zone = "${module.gke.cluster_zone}"
-
-  node_pool_name         = "small-nodes-pool"
-  node_count             = "2"
-  pool_min_node_count    = "1"
-  pool_max_node_count    = "4"
-  node_tags              = ["dev"]
-
-  node_labels = {
-    "env"         = "dev"
-    "machineType" = "n1-standard-1"
-  }
-}
 
 module "np2" {
   source         = "github.com/ostelco/ostelco-terraform-modules//terraform-google-gke-node-pool"
