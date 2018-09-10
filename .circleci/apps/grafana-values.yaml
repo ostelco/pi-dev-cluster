@@ -135,6 +135,8 @@ datasources:
      url: http://prometheus-server:9090
      access: proxy
      isDefault: true
+     jsonData:
+       tlsSkipVerify: true
 
 ## Configure grafana dashboard providers
 ## ref: http://docs.grafana.org/administration/provisioning/#dashboards
