@@ -72,4 +72,14 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     priority = -7 
     wait = true
     protected = true
- 
+
+    [apps.prometheus]
+    description = "Promethues dev instance"
+    namespace = "kube-system" 
+    enabled = true
+    chart = "stable/promethues"
+    version = "7.0.3"
+    valuesFile = "apps/prometheus-values.yaml"
+    priority = -6
+    wait = true
+    protected = true
