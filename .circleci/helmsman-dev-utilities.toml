@@ -94,3 +94,5 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     priority = -5
     wait = true
     protected = true
+    [apps.grafana.set]
+    "adminPassword"="$GRAFANA_ADMIN_PASSWORD"
