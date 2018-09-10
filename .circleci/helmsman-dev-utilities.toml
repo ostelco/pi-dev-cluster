@@ -83,3 +83,14 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     priority = -6
     wait = true
     protected = true
+
+    [apps.grafana]
+    description = "Grafan dev instance"
+    namespace = "kube-system" 
+    enabled = true
+    chart = "stable/grafana"
+    version = "1.14.6"
+    valuesFile = "apps/grafana-values.yaml"
+    priority = -5
+    wait = true
+    protected = true
