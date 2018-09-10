@@ -370,7 +370,7 @@ nodeExporter:
   ## Additional node-exporter container arguments
   ##
   extraArgs: {}
-
+  
   ## Additional node-exporter hostPath mounts
   ##
   extraHostPathMounts: []
@@ -794,7 +794,7 @@ serverFiles:
     - name: cpu-usage
       rules:
       - alert: NodeCPUUsage  
-        expr: IF (100 - (avg by (instance) (irate(node_cpu{name="node-exporter",mode="idle"}[5m])) * 100)) > 75
+        expr: (100 - (avg by (instance) (irate(node_cpu_seconds_total{kubernetes_name="prometheus-node-exporter"}[5m])) * 100)) > 75
         for: 2m 
         labels: 
           severity: page
@@ -804,35 +804,35 @@ serverFiles:
     - name: instance-availability
       rules: 
       - alert: InstanceDown
-        expr: IF up == 0
+        expr: up == 0
         for: 1m 
         labels:
           severity: page
         annotations:
           summary: "Instance {{ $labels.instance }} down"
           description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute."
-    - name: low-disk-space
-      rules: 
-      - alert: NodeLowRootDisk
-        expr: IF ((node_filesystem_size{mountpoint="/root-disk"} - node_filesystem_free{mountpoint="/root-disk"} ) / node_filesystem_size{mountpoint="/root-disk"} * 100) > 75
-        for: 2m 
-        labels:
-          severity: page
-        annotations:
-          summary: "{{$labels.instance}}: Low root disk space"
-          description: "{{$labels.instance}}: Root disk usage is above 75% (current value is: {{ $value }})"
-      - alert: NodeLowDataDisk 
-        expr: IF ((node_filesystem_size{mountpoint="/data-disk"} - node_filesystem_free{mountpoint="/data-disk"} ) / node_filesystem_size{mountpoint="/data-disk"} * 100) > 75
-        for: 2m 
-        labels:
-          severity: page
-        annotations:
-          summary: "{{$labels.instance}}: Low data disk space"
-          description: "{{$labels.instance}}: Data disk usage is above 75% (current value is: {{ $value }})"
+    # - name: low-disk-space
+    #   rules: 
+    #   - alert: NodeLowRootDisk
+    #     expr: ((node_filesystem_size{mountpoint="/root-disk"} - node_filesystem_free{mountpoint="/root-disk"} ) / node_filesystem_size{mountpoint="/root-disk"} * 100) > 75
+    #     for: 2m 
+    #     labels:
+    #       severity: page
+    #     annotations:
+    #       summary: "{{$labels.instance}}: Low root disk space"
+    #       description: "{{$labels.instance}}: Root disk usage is above 75% (current value is: {{ $value }})"
+    #   - alert: NodeLowDataDisk 
+    #     expr: ((node_filesystem_size{mountpoint="/data-disk"} - node_filesystem_free{mountpoint="/data-disk"} ) / node_filesystem_size{mountpoint="/data-disk"} * 100) > 75
+    #     for: 2m 
+    #     labels:
+    #       severity: page
+    #     annotations:
+    #       summary: "{{$labels.instance}}: Low data disk space"
+    #       description: "{{$labels.instance}}: Data disk usage is above 75% (current value is: {{ $value }})"
     - name: mem-usage
       rules: 
       - alert: NodeSwapUsage 
-        expr: IF (((node_memory_SwapTotal-node_memory_SwapFree)/node_memory_SwapTotal)*100) > 75
+        expr: (((node_memory_SwapTotal_bytes-node_memory_SwapFree_bytes)/node_memory_SwapTotal_bytes)*100) > 75
         for: 2m 
         labels:
           severity: page
@@ -840,7 +840,7 @@ serverFiles:
           summary: "{{$labels.instance}}: Swap usage detected"
           description: "{{$labels.instance}}: Swap usage usage is above 75% (current value is: {{ $value }})"
       - alert: NodeMemoryUsage 
-        expr: IF (((node_memory_MemTotal-node_memory_MemFree-node_memory_Cached)/(node_memory_MemTotal)*100)) > 75
+        expr: (((node_memory_MemTotal_bytes-node_memory_MemFree_bytes-node_memory_Cached_bytes)/(node_memory_MemTotal_bytes)*100)) > 75
         for: 2m 
         labels:
           severity: page
