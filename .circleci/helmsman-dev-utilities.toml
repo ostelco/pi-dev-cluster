@@ -82,7 +82,7 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     valuesFile = "apps/prometheus-values.yaml"
     priority = -6
     wait = true
-    protected = false
+    protected = true
 
     [apps.grafana]
     description = "Grafan dev instance"
