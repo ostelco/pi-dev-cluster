@@ -67,6 +67,37 @@ module "np" {
   }
 }
 
+module "high-mem" {
+  source         = "github.com/ostelco/ostelco-terraform-modules//terraform-google-gke-node-pool"
+  cluster_name   = "${module.gke.cluster_name}"
+  node_pool_zone = "${module.gke.cluster_zone}"
+
+  node_pool_name         = "highmem-pool"
+  pool_min_node_count    = "1"
+  initial_node_pool_size = "1"
+  pool_max_node_count    = "2"
+  node_tags              = ["dev_high_mem"]
+
+  # oauth_scopes define what Google API nodes in the pool have access to.
+  # list of APIs can be found here: https://developers.google.com/identity/protocols/googlescopes
+  oauth_scopes = [
+      "https://www.googleapis.com/auth/compute",
+      "https://www.googleapis.com/auth/devstorage.read_write",
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/service.management",
+      "https://www.googleapis.com/auth/pubsub",
+      "https://www.googleapis.com/auth/datastore",
+      "https://www.googleapis.com/auth/bigquery",
+      "https://www.googleapis.com/auth/sqlservice.admin",
+      "https://www.googleapis.com/auth/ndev.clouddns.readwrite", 
+    ]
+
+  node_labels = {
+    "env"         = "dev_high_mem"
+    "machineType" = "n1-highmem-2"
+  }
+}
 
 output "dev_cluster_endpoint" {
   value = "${module.gke.cluster_endpoint}"
