@@ -71,7 +71,7 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     valuesFile = "apps/neo4j-values.yaml"
     priority = -7 
     wait = true
-    protected = true
+    protected = false
 
     [apps.prometheus]
     description = "Promethues dev instance"
@@ -93,6 +93,6 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     valuesFile = "apps/grafana-values.yaml"
     priority = -5
     wait = true
-    protected = false
+    protected = true
     [apps.grafana.set]
     "adminPassword"="$GRAFANA_ADMIN_PASSWORD"
