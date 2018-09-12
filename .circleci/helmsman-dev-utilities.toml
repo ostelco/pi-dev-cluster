@@ -67,11 +67,11 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     namespace = "neo4j"
     enabled = true
     chart = "stable/neo4j"
-    version = "0.7.2"
+    version = "0.8.0"
     valuesFile = "apps/neo4j-values.yaml"
     priority = -7 
     wait = true
-    protected = false
+    protected = true
 
     [apps.prometheus]
     description = "Promethues dev instance"
