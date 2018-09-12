@@ -76,7 +76,7 @@ module "high-mem" {
   pool_min_node_count    = "1"
   initial_node_pool_size = "1"
   pool_max_node_count    = "2"
-  node_tags              = ["dev_high_mem"]
+  node_tags              = ["dev-high-mem"] # don't use underscores "_"
 
   # oauth_scopes define what Google API nodes in the pool have access to.
   # list of APIs can be found here: https://developers.google.com/identity/protocols/googlescopes
@@ -94,7 +94,7 @@ module "high-mem" {
     ]
 
   node_labels = {
-    "env"         = "dev_high_mem"
+    "env"         = "dev-high-mem" # don't use underscores "_"
     "machineType" = "n1-highmem-2"
   }
 }
