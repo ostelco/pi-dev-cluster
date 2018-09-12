@@ -114,9 +114,9 @@ readReplica:
   #       cp apoc-3.2.0.3-all.jar /plugins/
 
 resources: 
-limits:
-  cpu: 100m
-  memory: 1024Mi
-requests:
-  cpu: 100m
-  memory: 512Mi
+  limits:
+    cpu: 100m
+    memory: 900Mi
+  requests:
+    cpu: 100m
+    memory: 512Mi
