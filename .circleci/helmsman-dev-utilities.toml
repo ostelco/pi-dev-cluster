@@ -59,7 +59,7 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     version = "0.2.0"
     valuesFile = "apps/cert-issuer-values.yaml" # leaving it empty uses the default chart values
     priority = -8
-    protected = true
+    protected = false
 
     [apps.neo4j]
     name = "neo4j"
