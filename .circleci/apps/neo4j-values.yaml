@@ -83,7 +83,7 @@ core:
 
 # Read Replicas
 readReplica:
-  numberOfServers: 2
+  numberOfServers: 0
   ## Pass extra environment variables to the Neo4j container.
   ##
   extraVars:

@@ -25,8 +25,6 @@ storageBackend = "secret" # default is configMap
  # protected = <true or false> -- default to false 
 [namespaces]
   [namespaces.neo4j]
-  [namespaces.dev]
-   installTiller= true
 
 
 # define any private/public helm charts repos you would like to get charts from
@@ -59,7 +57,7 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     version = "0.2.0"
     valuesFile = "apps/cert-issuer-values.yaml" # leaving it empty uses the default chart values
     priority = -8
-    protected = false
+    protected = true
 
     [apps.neo4j]
     name = "neo4j"
@@ -71,7 +69,7 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     valuesFile = "apps/neo4j-values.yaml"
     priority = -7 
     wait = true
-    protected = true
+    protected = false
 
     [apps.prometheus]
     description = "Promethues dev instance"
