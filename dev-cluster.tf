@@ -1,6 +1,7 @@
 
 variable "project_id" {
   description = "Google Cloud project ID."
+  default = "pi-ostelco-dev"
 }
 
 variable "regional" {
