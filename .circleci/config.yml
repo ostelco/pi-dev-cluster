@@ -39,7 +39,6 @@ jobs:
           terraform init
           terraform apply --auto-approve  \
           -var cluster_admin_password=$DEV_CLUSTER_PASSWORD
-          chmod +x .circleci/store_cluster_certs.sh 
           .circleci/store_cluster_certs.sh 
 
     - persist_to_workspace:
