@@ -129,9 +129,9 @@ resource "kubernetes_secret" "scaninfo-secrets" {
   depends_on = ["kubernetes_namespace.namespace"]
 }
 
-resource "kubernetes_secret" "prime-sa.json" {
+resource "kubernetes_secret" "prime-sa-key" {
   metadata {
-    name = "prime-sa.json"
+    name = "prime-sa-key"
     namespace = "${var.namespace}"
     labels = {
       created_by = "terraform"
