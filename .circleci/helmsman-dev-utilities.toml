@@ -32,6 +32,7 @@ storageBackend = "secret" # default is configMap
 # private repos hosted in s3,GCS buckets are supported
 [helmRepos]
 ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
+datawire="https://www.getambassador.io"
 
 
 [apps]
@@ -78,7 +79,7 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     chart = "stable/prometheus"
     version = "8.4.2"
     valuesFile = "apps/prometheus-values.yaml"
-    priority = -6
+    priority = -5
     wait = true
     protected = true
 
@@ -89,8 +90,19 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     chart = "stable/grafana"
     version = "1.26.1"
     valuesFile = "apps/grafana-values.yaml"
-    priority = -5
+    priority = -4
     wait = true
     protected = true
     [apps.grafana.set]
     "adminPassword"="$GRAFANA_ADMIN_PASSWORD"
+
+    [apps.ambassador]
+    description = "Ambassador API Gateway."
+    namespace = "kube-system" 
+    enabled = true 
+    chart = "datawire/ambassador" 
+    version = "0.40.2"
+    valuesFile = "apps/ambassador-values.yaml" # leaving it empty uses the default chart values
+    wait = true
+    priority = -6
+    protected = true
