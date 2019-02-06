@@ -33,6 +33,7 @@ storageBackend = "secret" # default is configMap
 [helmRepos]
 ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
 datawire="https://www.getambassador.io"
+stable = "https://kubernetes-charts.storage.googleapis.com"
 
 
 [apps]
