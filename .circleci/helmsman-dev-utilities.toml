@@ -1,7 +1,7 @@
 # metadata -- add as many key/value pairs as you want
 [metadata]
 maintainer = "Sami Alajrami (sami@praqma.com)"
-description = "Desired state file for deploying Prime and its needed utilities."
+description = "Desired state file for deploying needed utilities for Prime."
 
 # paths to the certificate for connecting to the cluster
 # you have to use exact key names here : 'caCrt' for certificate and 'caKey' for the key and caClient for the client certificate
@@ -42,7 +42,7 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     namespace = "kube-system" # maps to the namespace as defined in environmetns above
     enabled = true # change to false if you want to delete this app release [empty = flase]
     chart = "stable/cert-manager" # changing the chart name means delete and recreate this chart
-    version = "0.3.4"
+    version = "0.5.2"
     valuesFile = "apps/cert-manager-values.yaml" # leaving it empty uses the default chart values
     wait = true
     priority = -9
@@ -65,7 +65,7 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     namespace = "neo4j"
     enabled = true
     chart = "stable/neo4j"
-    version = "0.8.0"
+    version = "0.10.0"
     valuesFile = "apps/neo4j-values.yaml"
     priority = -7 
     wait = true
@@ -76,18 +76,18 @@ ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
     namespace = "kube-system" 
     enabled = true
     chart = "stable/prometheus"
-    version = "7.0.3"
+    version = "8.4.2"
     valuesFile = "apps/prometheus-values.yaml"
     priority = -6
     wait = true
     protected = true
 
     [apps.grafana]
-    description = "Grafan dev instance"
+    description = "Grafana dev instance"
     namespace = "kube-system" 
     enabled = true
     chart = "stable/grafana"
-    version = "1.14.6"
+    version = "1.26.1"
     valuesFile = "apps/grafana-values.yaml"
     priority = -5
     wait = true

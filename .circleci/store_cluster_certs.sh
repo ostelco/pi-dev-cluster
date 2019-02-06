@@ -41,7 +41,7 @@ if [[ -r keys/${prefix}_client_certificate.crt ]] && [[ -r keys/${prefix}_client
     exit 1
   else
     echo "Cleaning up local file system ... "
-    rm -fr keys && echo "Keys cleanup complete." || echo "Something went wrong during keys cleanup."
+    #rm -fr keys && echo "Keys cleanup complete." || echo "Something went wrong during keys cleanup."
   fi
 
 else
