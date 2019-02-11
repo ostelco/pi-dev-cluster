@@ -106,4 +106,4 @@ stable = "https://kubernetes-charts.storage.googleapis.com"
     valuesFile = "apps/ambassador-values.yaml" # leaving it empty uses the default chart values
     wait = true
     priority = -6
-    protected = false
+    protected = true
