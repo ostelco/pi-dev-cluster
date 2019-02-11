@@ -17,7 +17,7 @@ daemonSet: false
 image:
   repository: quay.io/datawire/ambassador
   pullPolicy: IfNotPresent
-  tag: 0.50.0
+  tag: 0.50.1
   #imagePullSecrets: sample
 
 
@@ -36,7 +36,7 @@ service:
   annotations:
     getambassador.io/config: |
      ---
-     apiVersion: ambassador/v0
+     apiVersion: ambassador/v1
      kind: Module
      name:  tls
      config:
@@ -44,7 +44,7 @@ service:
          enabled: True
          redirect_cleartext_from: 80
      ---
-     apiVersion: ambassador/v0
+     apiVersion: ambassador/v1
      kind: Module
      name: ambassador
      config:
