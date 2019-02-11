@@ -104,7 +104,7 @@ jobs:
 
   deploy-dev-utilities: 
     docker:
-    - image: praqma/helmsman:v1.7.3-helm-v2.10.0
+    - image: praqma/helmsman:v1.7.3-helm-v2.11.0
 
     working_directory: ~/repo
 
