@@ -83,6 +83,7 @@ jobs:
           -var stripe_api_secret=${STRIPE_API_SECRET}  \
           -var slack_webhook_uri=${SLACK_WEBHOOK_URI}  \
           -var scaninfo_bucket_name=${SCANINFO_BUCKET_NAME}  \
+          -var scaninfo_master_key_uri=${SCANINFO_MASTER_KEY_URI}  \
           -var prime-sa-key-path=${PRIME_KEY} \
           -var dns-sa-key-path=${DNS_KEY} \
           -var namespace=${NAMESPACE} 
@@ -97,6 +98,7 @@ jobs:
           -var stripe_api_secret=${STRIPE_API_SECRET}  \
           -var slack_webhook_uri=${SLACK_WEBHOOK_URI}  \
           -var scaninfo_bucket_name=${SCANINFO_BUCKET_NAME}  \
+          -var scaninfo_master_key_uri=${SCANINFO_MASTER_KEY_URI}  \
           -var prime-sa-key-path=${PRIME_KEY} \
           -var dns-sa-key-path=${DNS_KEY} \
           -var namespace=${NAMESPACE}  

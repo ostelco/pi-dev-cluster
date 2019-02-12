@@ -38,6 +38,11 @@ variable "scaninfo_bucket_name" {
   
 }
 
+variable "scaninfo_master_key_uri" {
+  
+}
+
+
 variable "prime-sa-key-path" {
   
 }
@@ -125,6 +130,21 @@ resource "kubernetes_secret" "scaninfo-secrets" {
 
   data {
     bucketName = "${var.scaninfo_bucket_name}"
+  }
+  depends_on = ["kubernetes_namespace.namespace"]
+}
+
+resource "kubernetes_secret" "scaninfo-keys" {
+  metadata {
+    name = "scaninfo-keys"
+    namespace = "${var.namespace}"
+    labels = {
+      created_by = "terraform"
+    }
+  }
+
+  data {
+    masterKeyUri = "${var.scaninfo_master_key_uri}"
   }
   depends_on = ["kubernetes_namespace.namespace"]
 }
