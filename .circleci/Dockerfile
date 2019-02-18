@@ -3,7 +3,7 @@ FROM golang:alpine as builder
 ##
 ##  THIS DOCKERFILE describes a container that provides gcloud and
 ##  terraform, and is used by the circleci server to mutate cluster
-##  state.  The image is stored in eu.gcr.io/pi-ostelco-dev/terraform-gcloud:11.7
+##  state.  The image is stored in eu.gcr.io/pi-ostelco-prod/terraform-gcloud:11.7
 ##  where the tag is the terraform version (currently 11.7).
 ##
 
