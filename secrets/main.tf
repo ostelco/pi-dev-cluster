@@ -12,6 +12,7 @@ variable "keys_dir" {
 
 variable "namespace" {
   description = "the namespace to be create and where secrets will be placed."
+  default = "dev"
 }
 
 variable "jumio_api_secret" {
