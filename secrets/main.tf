@@ -160,7 +160,7 @@ resource "kubernetes_secret" "prime-sa-key" {
   }
 
   data {
-    prime-sa.json = "${file("${var.prime-sa-key-path}")}"
+    prime-service-account.json = "${file("${var.prime-sa-key-path}")}"
   }
   depends_on = ["kubernetes_namespace.namespace"]
 }

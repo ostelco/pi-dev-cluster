@@ -73,22 +73,7 @@ jobs:
           gsutil cp gs://pi-ostelco-dev-svc-acct-keys/dns-sa-key.json ${DNS_KEY}
           terraform init 
 
-          terraform plan \
-          -var cluster_endpoint=$(cat ~/repo/endpoint.txt) \
-          -var cluster_admin_password=$DEV_CLUSTER_PASSWORD \
-          -var keys_dir=~/repo/keys \
-          -var jumio_api_secret=${JUMIO_API_SECRET}  \
-          -var jumio_api_token=${JUMIO_API_TOKEN}  \
-          -var stripe_api_key=${STRIPE_API_KEY}  \
-          -var stripe_api_secret=${STRIPE_API_SECRET}  \
-          -var slack_webhook_uri=${SLACK_WEBHOOK_URI}  \
-          -var scaninfo_bucket_name=${SCANINFO_BUCKET_NAME}  \
-          -var scaninfo_master_key_uri=${SCANINFO_MASTER_KEY_URI}  \
-          -var prime-sa-key-path=${PRIME_KEY} \
-          -var dns-sa-key-path=${DNS_KEY} \
-          -var namespace=${NAMESPACE} 
-
-          # terraform apply --auto-approve \
+          # terraform plan \
           # -var cluster_endpoint=$(cat ~/repo/endpoint.txt) \
           # -var cluster_admin_password=$DEV_CLUSTER_PASSWORD \
           # -var keys_dir=~/repo/keys \
@@ -101,7 +86,22 @@ jobs:
           # -var scaninfo_master_key_uri=${SCANINFO_MASTER_KEY_URI}  \
           # -var prime-sa-key-path=${PRIME_KEY} \
           # -var dns-sa-key-path=${DNS_KEY} \
-          # -var namespace=${NAMESPACE}  
+          # -var namespace=${NAMESPACE} 
+
+          terraform apply --auto-approve \
+          -var cluster_endpoint=$(cat ~/repo/endpoint.txt) \
+          -var cluster_admin_password=$DEV_CLUSTER_PASSWORD \
+          -var keys_dir=~/repo/keys \
+          -var jumio_api_secret=${JUMIO_API_SECRET}  \
+          -var jumio_api_token=${JUMIO_API_TOKEN}  \
+          -var stripe_api_key=${STRIPE_API_KEY}  \
+          -var stripe_api_secret=${STRIPE_API_SECRET}  \
+          -var slack_webhook_uri=${SLACK_WEBHOOK_URI}  \
+          -var scaninfo_bucket_name=${SCANINFO_BUCKET_NAME}  \
+          -var scaninfo_master_key_uri=${SCANINFO_MASTER_KEY_URI}  \
+          -var prime-sa-key-path=${PRIME_KEY} \
+          -var dns-sa-key-path=${DNS_KEY} \
+          -var namespace=${NAMESPACE}  
 
 
   deploy-dev-utilities: 
