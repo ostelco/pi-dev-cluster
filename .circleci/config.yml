@@ -47,61 +47,47 @@ jobs:
             - endpoint.txt 
             - keys/*     
 
-  populate-k8s-secrets: 
-    docker:
-    - image: eu.gcr.io/pi-ostelco-prod/terraform-gcloud:11.7
-      environment: 
-        CLUSTER: dev
-        GOOGLE_CREDENTIALS: /tmp/credentials.json
+  # populate-k8s-secrets: 
+  #   docker:
+  #   - image: eu.gcr.io/pi-ostelco-prod/terraform-gcloud:11.7
+  #     environment: 
+  #       CLUSTER: dev
+  #       GOOGLE_CREDENTIALS: /tmp/credentials.json
 
-    working_directory: ~/repo
+  #   working_directory: ~/repo
 
-    steps:
-    - checkout
-    - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: ~/repo  
-    - run:
-        name: populating secrets to dev cluster
-        command: | 
-          /docker-entrypoint.sh
-          PRIME_KEY=prime-sa-key.json
-          DNS_KEY=dns-sa-key.json
-          NAMESPACE=${NAMESPACE:-dev}
-          cd secrets 
-          gsutil cp gs://pi-ostelco-dev-svc-acct-keys/prime-sa-key.json ${PRIME_KEY}
-          gsutil cp gs://pi-ostelco-dev-svc-acct-keys/dns-sa-key.json ${DNS_KEY}
-          terraform init 
+  #   steps:
+  #   - checkout
+  #   - attach_workspace:
+  #         # Must be absolute path or relative path from working_directory
+  #         at: ~/repo  
+  #   - run:
+  #       name: populating secrets to dev cluster
+  #       command: | 
+  #         /docker-entrypoint.sh
+  #         PRIME_KEY=prime-sa-key.json
+  #         DNS_KEY=dns-sa-key.json
+  #         NAMESPACE=${NAMESPACE:-dev}
+  #         cd secrets 
+  #         gsutil cp gs://pi-ostelco-dev-svc-acct-keys/prime-sa-key.json ${PRIME_KEY}
+  #         gsutil cp gs://pi-ostelco-dev-svc-acct-keys/dns-sa-key.json ${DNS_KEY}
+  #         terraform init 
 
-          # terraform plan \
-          # -var cluster_endpoint=$(cat ~/repo/endpoint.txt) \
-          # -var cluster_admin_password=$DEV_CLUSTER_PASSWORD \
-          # -var keys_dir=~/repo/keys \
-          # -var jumio_api_secret=${JUMIO_API_SECRET}  \
-          # -var jumio_api_token=${JUMIO_API_TOKEN}  \
-          # -var stripe_api_key=${STRIPE_API_KEY}  \
-          # -var stripe_api_secret=${STRIPE_API_SECRET}  \
-          # -var slack_webhook_uri=${SLACK_WEBHOOK_URI}  \
-          # -var scaninfo_bucket_name=${SCANINFO_BUCKET_NAME}  \
-          # -var scaninfo_master_key_uri=${SCANINFO_MASTER_KEY_URI}  \
-          # -var prime-sa-key-path=${PRIME_KEY} \
-          # -var dns-sa-key-path=${DNS_KEY} \
-          # -var namespace=${NAMESPACE} 
 
-          terraform apply --auto-approve \
-          -var cluster_endpoint=$(cat ~/repo/endpoint.txt) \
-          -var cluster_admin_password=$DEV_CLUSTER_PASSWORD \
-          -var keys_dir=~/repo/keys \
-          -var jumio_api_secret=${JUMIO_API_SECRET}  \
-          -var jumio_api_token=${JUMIO_API_TOKEN}  \
-          -var stripe_api_key=${STRIPE_API_KEY}  \
-          -var stripe_api_secret=${STRIPE_API_SECRET}  \
-          -var slack_webhook_uri=${SLACK_WEBHOOK_URI}  \
-          -var scaninfo_bucket_name=${SCANINFO_BUCKET_NAME}  \
-          -var scaninfo_master_key_uri=${SCANINFO_MASTER_KEY_URI}  \
-          -var prime-sa-key-path=${PRIME_KEY} \
-          -var dns-sa-key-path=${DNS_KEY} \
-          -var namespace=${NAMESPACE}  
+  #         terraform apply --auto-approve \
+  #         -var cluster_endpoint=$(cat ~/repo/endpoint.txt) \
+  #         -var cluster_admin_password=$DEV_CLUSTER_PASSWORD \
+  #         -var keys_dir=~/repo/keys \
+  #         -var jumio_api_secret=${JUMIO_API_SECRET}  \
+  #         -var jumio_api_token=${JUMIO_API_TOKEN}  \
+  #         -var stripe_api_key=${STRIPE_API_KEY}  \
+  #         -var stripe_api_secret=${STRIPE_API_SECRET}  \
+  #         -var slack_webhook_uri=${SLACK_WEBHOOK_URI}  \
+  #         -var scaninfo_bucket_name=${SCANINFO_BUCKET_NAME}  \
+  #         -var scaninfo_master_key_uri=${SCANINFO_MASTER_KEY_URI}  \
+  #         -var prime-sa-key-path=${PRIME_KEY} \
+  #         -var dns-sa-key-path=${DNS_KEY} \
+  #         -var namespace=${NAMESPACE}  
 
 
   deploy-dev-utilities: 
@@ -143,10 +129,10 @@ workflows:
         requires:
         - hold-before-updating-dev-cluster
     
-    - populate-k8s-secrets:
-        requires:
-        - terraform-dev-apply      
+    # - populate-k8s-secrets:
+    #     requires:
+    #     - terraform-dev-apply      
 
     - deploy-dev-utilities:
         requires:
-        - populate-k8s-secrets      
+        - terraform-dev-apply      

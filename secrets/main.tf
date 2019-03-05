@@ -1,3 +1,5 @@
+# This script is no longer used. Secrets are managed manually.
+
 variable "cluster_endpoint" {
   description = "cluster endpoint without https://"
 }

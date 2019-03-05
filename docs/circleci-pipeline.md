@@ -55,6 +55,8 @@ These apps are considered part of the infrastructure and are deployed from code 
 
 ##### K8S Secrets
 
+> UPDATE: secrets are no longer part of the CI pipeline. They are managed manually!
+
 These are secrets create by terraform in the cluster. This makes a newly created cluster ready to deploy Prime out of the box with all the required secrets being populated. See the [terraform script for creating secrets]((../secrets/main.tf)) for details about what is created.
 
 > When new secrets are needed, the [terraform script](../secrets/main.tf) needs to be adjusted to add them and then their values need to be added as env vars.
