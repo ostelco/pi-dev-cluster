@@ -32,6 +32,7 @@ storageBackend = "secret" # default is configMap
 # private repos hosted in s3,GCS buckets are supported
 [helmRepos]
 ostelco="https://storage.googleapis.com/pi-ostelco-helm-charts-repo/"
+datawire="https://www.getambassador.io"
 stable = "https://kubernetes-charts.storage.googleapis.com"
 
 
@@ -100,9 +101,9 @@ stable = "https://kubernetes-charts.storage.googleapis.com"
     description = "Ambassador API Gateway."
     namespace = "kube-system" 
     enabled = true 
-    chart = "stable/ambassador" 
-    version = "1.1.5"
+    chart = "datawire/ambassador" 
+    version = "0.40.2"
     valuesFile = "apps/ambassador-values.yaml" # leaving it empty uses the default chart values
     wait = true
     priority = -6
-    protected = false
+    protected = true
