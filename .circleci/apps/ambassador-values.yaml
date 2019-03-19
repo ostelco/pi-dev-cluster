@@ -17,7 +17,7 @@ daemonSet: false
 image:
   repository: quay.io/datawire/ambassador
   pullPolicy: IfNotPresent
-  tag: 0.50.1
+  tag: 0.50.3
   #imagePullSecrets: sample
 
 
@@ -31,6 +31,7 @@ service:
 
 
   type: LoadBalancer
+  loadBalancerIP: 35.205.117.148
   httpPort: 80
   httpsPort: 443
   annotations:
@@ -43,6 +44,7 @@ service:
        server:
          enabled: True
          redirect_cleartext_from: 80
+         #alpn_protocols: h2
      ---
      apiVersion: ambassador/v1
      kind: Module
