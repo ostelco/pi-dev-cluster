@@ -31,6 +31,7 @@ echo $(terraform output ${prefix}_client_certificate) | base64 -d > keys/${prefi
 echo $(terraform output ${prefix}_client_key) | base64 -d > keys/${prefix}_client_key.key
 echo $(terraform output ${prefix}_ca_certificate) | base64 -d > keys/${prefix}_cluster_ca.crt
 echo $(terraform output ${prefix}_endpoint) > endpoint.txt
+echo $(terraform output ${prefix}_ambassador_ip) > static_ip.txt
 
 # push secrets to GCS and cleanup the local file system
 if [[ -r keys/${prefix}_client_certificate.crt ]] && [[ -r keys/${prefix}_client_key.key ]] && [[ -r keys/${prefix}_cluster_ca.crt ]];then

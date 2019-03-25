@@ -42,7 +42,6 @@ fullnameOverride: ""
 
 service:
   type: LoadBalancer
-  loadBalancerIP: 34.76.100.135
 
   # Note that target http ports need to match your ambassador configurations service_port
   # https://www.getambassador.io/reference/modules/#the-ambassador-module
@@ -68,7 +67,6 @@ service:
        server:
          enabled: True
          redirect_cleartext_from: 80
-         alpn_protocols: h2
      ---
      apiVersion: ambassador/v1
      kind: Module

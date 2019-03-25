@@ -114,6 +114,18 @@ module "high-mem" {
 
 }
 
+resource "google_compute_address" "static_ambassador_ip" {
+  provider = "google-beta"
+  name = "ambassador-static-ip"
+  description = "A static external IP for dev Ambassador LB"
+}
+
+output "dev_cluster_ambassador_ip" {
+  sensitive = true
+  value = "${google_compute_address.static_ambassador_ip.address}"
+}
+
+
 output "dev_cluster_endpoint" {
   sensitive = true
   value = "${module.gke.cluster_endpoint}"

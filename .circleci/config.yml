@@ -106,7 +106,8 @@ jobs:
         command: | 
           echo $PI_DEV_GOOGLE_CREDENTIALS > /tmp/credentials.json
           export GOOGLE_APPLICATION_CREDENTIALS=/tmp/credentials.json
-          export PI_DEV_K8S_ENDPOINT=https://$(cat endpoint.txt)     
+          export PI_DEV_K8S_ENDPOINT=https://$(cat endpoint.txt) 
+          export AMBASSADOR_STATIC_IP=$(cat static_ip.txt)    
           helmsman --debug --apply --keep-untracked-releases --suppress-diff-secrets -f .circleci/helmsman-dev-utilities.toml
 
   
