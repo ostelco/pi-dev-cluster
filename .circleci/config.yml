@@ -4,7 +4,7 @@ jobs:
     docker:
       # this image takes gcloud credentials from an env variable called: GOOGLE_CREDENTIALS and authenticates gcloud with it.
       # the credentials file is made available inside the container in: /tmp/credentials.json
-    - image: eu.gcr.io/pi-ostelco-prod/terraform-gcloud:11.7
+    - image: eu.gcr.io/pi-ostelco-prod/terraform-gcloud:11.13
       environment: 
         CLUSTER: dev
         GOOGLE_CREDENTIALS: /tmp/credentials.json
@@ -23,7 +23,7 @@ jobs:
 
   terraform-dev-apply:
     docker:
-    - image: eu.gcr.io/pi-ostelco-prod/terraform-gcloud:11.7
+    - image: eu.gcr.io/pi-ostelco-prod/terraform-gcloud:11.13
       environment: 
         CLUSTER: dev
         GOOGLE_CREDENTIALS: /tmp/credentials.json
@@ -49,7 +49,7 @@ jobs:
 
   # populate-k8s-secrets: 
   #   docker:
-  #   - image: eu.gcr.io/pi-ostelco-prod/terraform-gcloud:11.7
+  #   - image: eu.gcr.io/pi-ostelco-prod/terraform-gcloud:11.13
   #     environment: 
   #       CLUSTER: dev
   #       GOOGLE_CREDENTIALS: /tmp/credentials.json
@@ -92,7 +92,7 @@ jobs:
 
   deploy-dev-utilities: 
     docker:
-    - image: praqma/helmsman:v1.7.3-helm-v2.11.0
+    - image: praqma/helmsman:v1.8.1-helm-v2.11.0
 
     working_directory: ~/repo
 

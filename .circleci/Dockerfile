@@ -30,15 +30,20 @@ RUN apk --no-cache add \
 # does not have the latest version of terraform so therefore we
 # build terraform from source.
 
-ENV TERRAFORM_VERSION=0.11.7
+ENV TERRAFORM_VERSION=0.11.13
 
 ENV TF_DEV=true
 ENV TF_RELEASE=true
 
-WORKDIR $GOPATH/src/github.com/hashicorp/terraform
-RUN git clone https://github.com/hashicorp/terraform.git ./ && \
-    git checkout v${TERRAFORM_VERSION} && \
-    /bin/bash scripts/build.sh
+WORKDIR /home
+RUN curl -o /home/tf.zip https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip && \
+    unzip /home/tf.zip 
+    
+     
+# WORKDIR $GOPATH/src/github.com/hashicorp/terraform
+# RUN git clone https://github.com/hashicorp/terraform.git ./ && \
+#     git checkout v${TERRAFORM_VERSION} && \
+#     /bin/bash scripts/build.sh
 
 
 FROM alpine
@@ -46,7 +51,7 @@ FROM alpine
 ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin:/usr/local/terraform/bin
 RUN apk --no-cache add python ca-certificates git
 
-COPY --from=builder go/src/github.com/hashicorp/terraform /usr/local/terraform
+COPY --from=builder /home/terraform /usr/bin/terraform
 COPY --from=builder /usr/local/gcloud /usr/local/gcloud
 
 
