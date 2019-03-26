@@ -53,6 +53,7 @@ module "np" {
   pool_min_node_count    = "1"
   pool_max_node_count    = "4"
   node_tags              = ["dev"]
+  auto_upgrade           = true
 
   node_labels = {
     "env"         = "dev"
@@ -91,6 +92,7 @@ module "high-mem" {
   initial_node_pool_size = "1"
   pool_max_node_count    = "4"
   node_tags              = ["dev-high-mem"]
+  auto_upgrade           = true
 
   node_labels = {
     "env"         = "dev-high-mem"
