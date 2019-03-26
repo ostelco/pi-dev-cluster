@@ -35,7 +35,7 @@ module "gke" {
   cluster_password      = "${var.cluster_admin_password}"
   cluster_name          = "pi-dev"
   cluster_description   = "Development cluster for Ostelco Pi."
-  cluster_version       = "1.10.11-gke.1"
+  cluster_version       = "1.11.8-gke.4"
   cluster_zones         = "${var.cluster_zones}"
   regional              = "${var.regional}"
 
@@ -72,6 +72,7 @@ module "np" {
       "https://www.googleapis.com/auth/bigquery",
       "https://www.googleapis.com/auth/sqlservice.admin",
       "https://www.googleapis.com/auth/ndev.clouddns.readwrite", 
+      "https://www.googleapis.com/auth/servicecontrol",
     ]
 
 
@@ -88,7 +89,7 @@ module "high-mem" {
   node_pool_name = "highmem-pool"
   pool_min_node_count    = "1"
   initial_node_pool_size = "1"
-  pool_max_node_count    = "2"
+  pool_max_node_count    = "4"
   node_tags              = ["dev-high-mem"]
 
   node_labels = {
@@ -109,6 +110,7 @@ module "high-mem" {
       "https://www.googleapis.com/auth/bigquery",
       "https://www.googleapis.com/auth/sqlservice.admin",
       "https://www.googleapis.com/auth/ndev.clouddns.readwrite", 
+      "https://www.googleapis.com/auth/servicecontrol",
     ]
 
 
