@@ -67,6 +67,10 @@ service:
        server:
          enabled: True
          redirect_cleartext_from: 80
+       client:
+         enabled: True
+         cert_required: True
+         ca_secret: cacert.cert-tes  
      ---
      apiVersion: ambassador/v1
      kind: Module
