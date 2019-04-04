@@ -25,6 +25,7 @@ varIsSet()
 varIsSet PROJECT true
 # varIsSet GOOGLE_CREDENTIALS true
 varIsSet BUCKETS_LOCATION false europe-west1
+varIsSet BUCKETS_LOCATION_SG false asia-southeast1
 varIsSet TARGET_ENV false dev
 varIsSet DATAFLOW_REGION true 
 
@@ -50,7 +51,8 @@ gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-k8s-key-store/
 gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-gradle-cache/
 gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-data-traffic/
 gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-svc-acct-keys/
-gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-ekyc-scandata/
+gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-ekyc-scandata-global/
+gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION_SG} gs://${PROJECT}-ekyc-scandata-sg/
 
 # # creating prime-service-account
 echo "INFO: creating prime service account ..."
@@ -64,6 +66,7 @@ gcloud projects add-iam-policy-binding ${PROJECT} --member serviceAccount:${PRIM
 gcloud projects add-iam-policy-binding ${PROJECT} --member serviceAccount:${PRIME_SERVICE_ACCOUNT_NAME}@${PROJECT}.iam.gserviceaccount.com --role roles/cloudtrace.agent 
 gcloud projects add-iam-policy-binding ${PROJECT} --member serviceAccount:${PRIME_SERVICE_ACCOUNT_NAME}@${PROJECT}.iam.gserviceaccount.com --role roles/editor
 gcloud projects add-iam-policy-binding ${PROJECT} --member serviceAccount:${PRIME_SERVICE_ACCOUNT_NAME}@${PROJECT}.iam.gserviceaccount.com --role roles/cloudsql.admin  
+gcloud projects add-iam-policy-binding ${PROJECT} --member serviceAccount:${PRIME_SERVICE_ACCOUNT_NAME}@${PROJECT}.iam.gserviceaccount.com --role roles/cloudkms.cryptoKeyEncrypterDecrypter
 
 echo "INFO: generating PRIME service account key and pushing it to google cloud bucket ..."
 gcloud iam service-accounts keys create prime-sa-key.json --iam-account ${PRIME_SERVICE_ACCOUNT_NAME}@${PROJECT}.iam.gserviceaccount.com  
@@ -86,7 +89,17 @@ rm dns-sa-key.json
 # creating pubsub topics
 
 echo "INFO: creating pubsub topics ..."
-gcloud pubsub topics create purchase-info data-traffic active-users
+gcloud pubsub topics create purchase-info data-traffic active-users stripe-events
+gcloud pubsub topics create ocs-ccr ocs-cca ocs-activate
+
+# creating pubsub subscriptions
+echo "INFO: creating pubsub subscriptions ..."
+gcloud pubsub subscriptions create test-pseudo --topic data-traffic
+gcloud pubsub subscriptions create purchase-info-sub --topic purchase-info
+gcloud pubsub subscriptions create stripe-event-store-sub stripe-event-report-sub --topic stripe-events
+gcloud pubsub subscriptions create ocs-ccr-sub --topic ocs-ccr
+gcloud pubsub subscriptions create ocsgw-cca-sub --topic ocs-cca
+gcloud pubsub subscriptions create ocsgw-activate-sub --topic ocs-activate
 
 # deploying Endpoints
 
