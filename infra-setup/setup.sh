@@ -89,7 +89,17 @@ rm dns-sa-key.json
 # creating pubsub topics
 
 echo "INFO: creating pubsub topics ..."
-gcloud pubsub topics create purchase-info data-traffic active-users
+gcloud pubsub topics create purchase-info data-traffic active-users stripe-events
+gcloud pubsub topics create ocs-ccr ocs-cca ocs-activate
+
+# creating pubsub subscriptions
+echo "INFO: creating pubsub subscriptions ..."
+gcloud pubsub subscriptions create test-pseudo --topic data-traffic
+gcloud pubsub subscriptions create purchase-info-sub --topic purchase-info
+gcloud pubsub subscriptions create stripe-event-store-sub stripe-event-report-sub --topic stripe-events
+gcloud pubsub subscriptions create ocs-ccr-sub --topic ocs-ccr
+gcloud pubsub subscriptions create ocsgw-cca-sub --topic ocs-cca
+gcloud pubsub subscriptions create ocsgw-activate-sub --topic ocs-activate
 
 # deploying Endpoints
 
