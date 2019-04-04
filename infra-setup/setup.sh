@@ -25,6 +25,7 @@ varIsSet()
 varIsSet PROJECT true
 # varIsSet GOOGLE_CREDENTIALS true
 varIsSet BUCKETS_LOCATION false europe-west1
+varIsSet BUCKETS_LOCATION_SG false asia-southeast1
 varIsSet TARGET_ENV false dev
 varIsSet DATAFLOW_REGION true 
 
@@ -50,7 +51,8 @@ gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-k8s-key-store/
 gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-gradle-cache/
 gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-data-traffic/
 gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-svc-acct-keys/
-gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-ekyc-scandata/
+gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION} gs://${PROJECT}-ekyc-scandata-global/
+gsutil mb -c REGIONAL -l ${BUCKETS_LOCATION_SG} gs://${PROJECT}-ekyc-scandata-sg/
 
 # # creating prime-service-account
 echo "INFO: creating prime service account ..."
@@ -64,6 +66,7 @@ gcloud projects add-iam-policy-binding ${PROJECT} --member serviceAccount:${PRIM
 gcloud projects add-iam-policy-binding ${PROJECT} --member serviceAccount:${PRIME_SERVICE_ACCOUNT_NAME}@${PROJECT}.iam.gserviceaccount.com --role roles/cloudtrace.agent 
 gcloud projects add-iam-policy-binding ${PROJECT} --member serviceAccount:${PRIME_SERVICE_ACCOUNT_NAME}@${PROJECT}.iam.gserviceaccount.com --role roles/editor
 gcloud projects add-iam-policy-binding ${PROJECT} --member serviceAccount:${PRIME_SERVICE_ACCOUNT_NAME}@${PROJECT}.iam.gserviceaccount.com --role roles/cloudsql.admin  
+gcloud projects add-iam-policy-binding ${PROJECT} --member serviceAccount:${PRIME_SERVICE_ACCOUNT_NAME}@${PROJECT}.iam.gserviceaccount.com --role roles/cloudkms.cryptoKeyEncrypterDecrypter
 
 echo "INFO: generating PRIME service account key and pushing it to google cloud bucket ..."
 gcloud iam service-accounts keys create prime-sa-key.json --iam-account ${PRIME_SERVICE_ACCOUNT_NAME}@${PROJECT}.iam.gserviceaccount.com  
