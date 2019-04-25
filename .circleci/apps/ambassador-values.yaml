@@ -42,6 +42,7 @@ fullnameOverride: ""
 
 service:
   type: LoadBalancer
+  externalTrafficPolicy: Local
 
   # Note that target http ports need to match your ambassador configurations service_port
   # https://www.getambassador.io/reference/modules/#the-ambassador-module
