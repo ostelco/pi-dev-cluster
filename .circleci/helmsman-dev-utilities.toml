@@ -118,4 +118,3 @@ stable = "https://kubernetes-charts.storage.googleapis.com"
     chart = "incubator/vault"
     version = "0.18.4"
     valuesFile = "apps/vault-values.yaml"
-    protected = true  
