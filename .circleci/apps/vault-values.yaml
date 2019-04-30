@@ -169,10 +169,16 @@ vault:
     - name: vault-gcs-backend
       secret:
         secretName: vault-gcs-backend-secret
+    - name: vault-seal-gcpckms
+      secret:
+        secretName: vault-seal-gcpckms-secret    
   extraVolumeMounts: 
     - name: vault-gcs-backend
       mountPath: /etc/backend/
       readOnly: true
+    - name: vault-seal-gcpckms
+      mountPath: /etc/seal/gcpckms/
+      readOnly: true  
   extraInitContainers: {}
   ## Init containers to be added
   # - name: do-something
@@ -214,5 +220,14 @@ vault:
     storage:
       gcs:
         bucket: "pi-ostelco-dev-vault-secrets-backend"
+        ha_enabled: "true"
         # # Use a custom secret to mount this file.
         # credentials_file: ""
+    seal: 
+      gcpckms: 
+        project: "pi-ostelco-dev"
+        region: "europe-west2"
+        key_ring: "vault-ring"
+        crypto_key: "vault-dev"
+        credentials: "/etc/seal/gcpckms/sa-key.json"    
+    ui: true    
