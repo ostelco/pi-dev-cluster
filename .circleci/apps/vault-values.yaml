@@ -152,9 +152,9 @@ vault:
   # Configure additional environment variables for the Vault containers
   extraEnv: 
     - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: "/etc/backend/sa-key.json"
+      value: "/etc/vault/backend/sa-key.json"
     - name: VAULT_API_ADDR
-      value: http://$(POD_IP):8200   
+      value: http://vault-vault:8200   
   extraContainers: {}
   ## Additional containers to be added to the Vault pod
   # - name: vault-sidecar
@@ -173,14 +173,20 @@ vault:
         secretName: vault-gcs-backend-secret
     - name: vault-seal-gcpckms
       secret:
-        secretName: vault-seal-gcpckms-secret    
+        secretName: vault-seal-gcpckms-secret 
+    - name: vault-tls
+      secret:
+        secretName: vault-tls        
   extraVolumeMounts: 
     - name: vault-gcs-backend
-      mountPath: /etc/backend/
+      mountPath: /etc/vault/backend/
       readOnly: true
     - name: vault-seal-gcpckms
-      mountPath: /etc/seal/gcpckms/
-      readOnly: true  
+      mountPath: /etc/vault/seal/gcpckms/
+      readOnly: true 
+    - name: vault-tls
+      mountPath: /etc/vault/tls/
+      readOnly: true    
   extraInitContainers: {}
   ## Init containers to be added
   # - name: do-something
@@ -213,11 +219,12 @@ vault:
       tcp:
         address: '[::]:8200'
         cluster_address: '[::]:8201'
-        tls_disable: true
+        tls_disable: false
         tls_prefer_server_cipher_suites: true
         tls_cipher_suites: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA
-        # tls_cert_file: /vault/tls/server.crt
-        # tls_key_file: /vault/tls/server.key
+        tls_cert_file: /etc/vault/tls/vault.pem
+        tls_key_file: /etc/vault/tls/vault-key.pem
+        tls_min_version: "tls12"
     # See https://www.vaultproject.io/docs/configuration/storage/ for storage backends
     storage:
       gcs:
@@ -231,5 +238,5 @@ vault:
         region: "europe-west2"
         key_ring: "vault-ring"
         crypto_key: "vault-dev"
-        credentials: "/etc/seal/gcpckms/sa-key.json"    
+        credentials: "/etc/vault/seal/gcpckms/sa-key.json"    
     ui: true    
