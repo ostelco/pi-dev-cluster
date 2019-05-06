@@ -153,6 +153,8 @@ vault:
   extraEnv: 
     - name: GOOGLE_APPLICATION_CREDENTIALS
       value: "/etc/backend/sa-key.json"
+    - name: VAULT_API_ADDR
+      value: http://$(POD_IP):8200   
   extraContainers: {}
   ## Additional containers to be added to the Vault pod
   # - name: vault-sidecar
