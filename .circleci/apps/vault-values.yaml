@@ -220,7 +220,7 @@ vault:
     storage:
       gcs:
         bucket: "pi-ostelco-dev-vault-secrets-backend"
-        ha_enabled: "true"
+        # ha_enabled: "true"
         # # Use a custom secret to mount this file.
         # credentials_file: ""
     seal: 
