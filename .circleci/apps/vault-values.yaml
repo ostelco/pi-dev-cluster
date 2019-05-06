@@ -1,7 +1,7 @@
 # Default values for vault.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-replicaCount: 3
+replicaCount: 2
 ## The name of the secret to use if pulling images from a private registry.
 # imagePullSecret:
 image:
@@ -220,7 +220,7 @@ vault:
     storage:
       gcs:
         bucket: "pi-ostelco-dev-vault-secrets-backend"
-        # ha_enabled: "true"
+        ha_enabled: "true"
         # # Use a custom secret to mount this file.
         # credentials_file: ""
     seal: 
