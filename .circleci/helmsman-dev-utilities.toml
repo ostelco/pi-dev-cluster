@@ -25,7 +25,7 @@ storageBackend = "secret" # default is configMap
  # protected = <true or false> -- default to false 
 [namespaces]
   [namespaces.neo4j]
-
+  [namespaces.vault]
 
 # define any private/public helm charts repos you would like to get charts from
 # syntax: repo_name = "repo_url"
@@ -101,9 +101,20 @@ stable = "https://kubernetes-charts.storage.googleapis.com"
     description = "Ambassador API Gateway."
     namespace = "kube-system" 
     enabled = true 
-    chart = "datawire/ambassador" 
-    version = "0.40.2"
-    valuesFile = "apps/ambassador-values.yaml" # leaving it empty uses the default chart values
+    chart = "stable/ambassador" 
+    version = "1.1.5"
+    valuesFile = "apps/ambassador-values.yaml" 
     wait = true
     priority = -6
-    protected = true
+    protected = false
+     [apps.ambassador.set]
+      "service.loadBalancerIP" = "$AMBASSADOR_STATIC_IP"
+
+    [apps.vault]
+    name = "vault"
+    description = "Vault for secrets"
+    namespace = "vault"
+    enabled = true
+    chart = "incubator/vault"
+    version = "0.18.4"
+    valuesFile = "apps/vault-values.yaml"

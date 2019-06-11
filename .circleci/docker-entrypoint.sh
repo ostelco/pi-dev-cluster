@@ -1,5 +1,8 @@
 #!/bin/sh
 
+echo "logging Terraform version ..."
+terraform version
+
 if [ "$CLUSTER" = "dev" ] && [ ! -z "${PI_DEV_GOOGLE_CREDENTIALS}" ]; then
   echo $PI_DEV_GOOGLE_CREDENTIALS > /tmp/credentials.json
 elif [ "$CLUSTER" = "prod" ] && [ ! -z "${PI_PROD_GOOGLE_CREDENTIALS}" ]; then  

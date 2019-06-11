@@ -35,7 +35,7 @@ module "gke" {
   cluster_password      = "${var.cluster_admin_password}"
   cluster_name          = "pi-dev"
   cluster_description   = "Development cluster for Ostelco Pi."
-  cluster_version       = "1.10.11-gke.1"
+  cluster_version       = "1.11.8-gke.4"
   cluster_zones         = "${var.cluster_zones}"
   regional              = "${var.regional}"
 
@@ -54,6 +54,7 @@ module "np" {
   pool_max_node_count    = "4"
   node_tags              = ["dev"]
   pool_node_machine_type = "n1-standard-2"
+  auto_upgrade           = true
 
   node_labels = {
     "env"         = "dev"
@@ -73,6 +74,7 @@ module "np" {
       "https://www.googleapis.com/auth/bigquery",
       "https://www.googleapis.com/auth/sqlservice.admin",
       "https://www.googleapis.com/auth/ndev.clouddns.readwrite", 
+      "https://www.googleapis.com/auth/servicecontrol",
     ]
 
 
@@ -89,8 +91,9 @@ module "high-mem" {
   node_pool_name = "highmem-pool"
   pool_min_node_count    = "1"
   initial_node_pool_size = "1"
-  pool_max_node_count    = "2"
+  pool_max_node_count    = "4"
   node_tags              = ["dev-high-mem"]
+  auto_upgrade           = true
 
   node_labels = {
     "env"         = "dev-high-mem"
@@ -110,10 +113,23 @@ module "high-mem" {
       "https://www.googleapis.com/auth/bigquery",
       "https://www.googleapis.com/auth/sqlservice.admin",
       "https://www.googleapis.com/auth/ndev.clouddns.readwrite", 
+      "https://www.googleapis.com/auth/servicecontrol",
     ]
 
 
 }
+
+resource "google_compute_address" "static_ambassador_ip" {
+  provider = "google-beta"
+  name = "ambassador-static-ip"
+  description = "A static external IP for dev Ambassador LB"
+}
+
+output "dev_cluster_ambassador_ip" {
+  sensitive = true
+  value = "${google_compute_address.static_ambassador_ip.address}"
+}
+
 
 output "dev_cluster_endpoint" {
   sensitive = true
