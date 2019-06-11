@@ -41,7 +41,7 @@ module "gke" {
 
 }
 
-module "np" {
+module "np2" {
   source         = "github.com/ostelco/ostelco-terraform-modules//terraform-google-gke-node-pool"
   project_id     = "${var.project_id}"
   regional       = "${var.regional}"
@@ -49,7 +49,7 @@ module "np" {
   cluster_region = "${var.cluster_region}"
   node_pool_zone = "${var.cluster_zones[0]}"
 
-  node_pool_name = "small-nodes-pool"
+  node_pool_name = "small-nodes-pool2"
   pool_min_node_count    = "1"
   pool_max_node_count    = "4"
   node_tags              = ["dev"]
@@ -58,7 +58,7 @@ module "np" {
 
   node_labels = {
     "env"         = "dev"
-    "machineType" = "n1-standard-1"
+    "machineType" = "n1-standard-2"
   }
   
   # oauth_scopes define what Google API nodes in the pool have access to.
