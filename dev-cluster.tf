@@ -53,6 +53,7 @@ module "np" {
   pool_min_node_count    = "1"
   pool_max_node_count    = "4"
   node_tags              = ["dev"]
+  pool_node_machine_type = "n1-standard-2"
 
   node_labels = {
     "env"         = "dev"
