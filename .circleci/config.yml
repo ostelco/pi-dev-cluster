@@ -96,7 +96,7 @@ jobs:
         environment:
           PROJECT: pi-ostelco-dev
           CLUSTER: pi-dev
-          ZONE: europe-west1-c
+          ZONE: europe-west1
           SERVICE_ACCOUNT: terraform-dev-cluster@pi-ostelco-dev.iam.gserviceaccount.com
     steps:
       - checkout
