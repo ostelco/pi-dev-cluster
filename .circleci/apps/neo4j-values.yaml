@@ -51,7 +51,7 @@ core:
     ## If undefined (the default) or set to null, no storageClassName spec is
     ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
     ##   GKE, AWS & OpenStack)
-    storageClass: "standard"
+    storageClass: "ssd"
 
     ## Subdirectory of core server data Persistent Volume to mount
     ## Useful if the volume's root directory is not empty
@@ -120,9 +120,12 @@ readReplica:
   #       cp apoc-3.2.0.3-all.jar /plugins/
 
 resources: 
-  limits:
-    cpu: 250m
-    memory: 1000Mi
+  # limits:
+  #   cpu: 500m
+  #   memory: 1000Mi
   requests:
-    cpu: 100m
-    memory: 512Mi
+    cpu: 200m
+    memory: 768Mi
+
+nodeSelector:
+  target: neo4j    

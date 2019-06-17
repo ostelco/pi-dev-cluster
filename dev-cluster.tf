@@ -6,7 +6,7 @@ variable "project_id" {
 
 variable "regional" {
   description = "whether the cluster should be created in multiple zones or not."
-  default = false
+  default = true
 }
 
 variable "cluster_region" {
@@ -15,7 +15,7 @@ variable "cluster_region" {
 }
 
 variable "cluster_zones" {
-  default     = ["europe-west1-c"]
+  default     = ["europe-west1-b", "europe-west1-c" , "europe-west1-d"]
   description = "The zone(s) where the cluster will be created."
 }
 
@@ -35,29 +35,31 @@ module "gke" {
   cluster_password      = "${var.cluster_admin_password}"
   cluster_name          = "pi-dev"
   cluster_description   = "Development cluster for Ostelco Pi."
-  cluster_version       = "1.11.8-gke.4"
+  cluster_version       = "1.13.6-gke.6"
   cluster_zones         = "${var.cluster_zones}"
   regional              = "${var.regional}"
 
 }
 
-module "np" {
+module "prime-nodes" {
   source         = "github.com/ostelco/ostelco-terraform-modules//terraform-google-gke-node-pool"
   project_id     = "${var.project_id}"
   regional       = "${var.regional}"
   cluster_name   = "${module.gke.cluster_name}" # creates implicit dependency
   cluster_region = "${var.cluster_region}"
-  node_pool_zone = "${var.cluster_zones[0]}"
-
-  node_pool_name = "small-nodes-pool"
+  
+  node_pool_name = "prime-nodes"
   pool_min_node_count    = "1"
-  pool_max_node_count    = "4"
-  node_tags              = ["dev"]
+  initial_node_pool_size = "1"
+  pool_max_node_count    = "3"
+  node_tags              = ["dev", "prime"]
   auto_upgrade           = true
+  pool_node_machine_type = "n1-standard-1"
 
   node_labels = {
-    "env"         = "dev"
+    "target"         = "prime"
     "machineType" = "n1-standard-1"
+    "env"         = "dev"
   }
   
   # oauth_scopes define what Google API nodes in the pool have access to.
@@ -79,24 +81,25 @@ module "np" {
 
 }
 
-module "high-mem" {
+module "neo4j-nodes" {
   source         = "github.com/ostelco/ostelco-terraform-modules//terraform-google-gke-node-pool"
   project_id     = "${var.project_id}"
   regional       = "${var.regional}"
   cluster_name   = "${module.gke.cluster_name}" # creates implicit dependency
   cluster_region = "${var.cluster_region}"
-  node_pool_zone = "${var.cluster_zones[0]}"
-
-  node_pool_name = "highmem-pool"
+  
+  node_pool_name = "neo4j-nodes"
   pool_min_node_count    = "1"
   initial_node_pool_size = "1"
-  pool_max_node_count    = "4"
-  node_tags              = ["dev-high-mem"]
+  pool_max_node_count    = "3"
+  node_tags              = ["dev", "neo4j"]
   auto_upgrade           = true
+  pool_node_machine_type = "n1-standard-2"
 
   node_labels = {
-    "env"         = "dev-high-mem"
-    "machineType" = "n1-highmem-2"
+    "target"         = "neo4j"
+    "machineType" = "n1-standard-2"
+    "env"         = "dev"
   }
   
   # oauth_scopes define what Google API nodes in the pool have access to.

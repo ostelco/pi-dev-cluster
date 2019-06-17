@@ -90,6 +90,29 @@ jobs:
   #         -var dns-sa-key-path=${DNS_KEY} \
   #         -var namespace=${NAMESPACE}  
 
+  create-cluster-prereqs:
+    docker:
+      - image: praqma/gcloud-kubectl-helm:v2.11.0
+        environment:
+          PROJECT: pi-ostelco-dev
+          CLUSTER: pi-dev
+          ZONE: europe-west1-c
+          SERVICE_ACCOUNT: terraform-dev-cluster@pi-ostelco-dev.iam.gserviceaccount.com
+    steps:
+      - checkout
+
+      - run:
+          name: create dev cluster prerequisites 
+          command: |
+            export GOOGLE_CREDENTIALS=${PI_DEV_GOOGLE_CREDENTIALS}
+            /authenticate.bash
+            # create SSD storage class
+            kubectl apply -f .circleci/storage_class.yaml
+            # cert-manager CRDs and namespace labels
+            CERT_MANAGER_VERSION=0.8
+            kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-${CERT_MANAGER_VERSION}/deploy/manifests/00-crds.yaml
+            CERT_MANAGER_NAMESPACE=kube-system
+            kubectl label namespace ${CERT_MANAGER_NAMESPACE} certmanager.k8s.io/disable-validation="true"
 
   deploy-dev-utilities: 
     docker:
@@ -134,7 +157,9 @@ workflows:
     # - populate-k8s-secrets:
     #     requires:
     #     - terraform-dev-apply      
-
+    - create-cluster-prereqs:
+        requires:
+        - terraform-dev-apply
     - deploy-dev-utilities:
         requires:
-        - terraform-dev-apply      
+        - create-cluster-prereqs     
