@@ -112,7 +112,7 @@ jobs:
             CERT_MANAGER_VERSION=0.8
             kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-${CERT_MANAGER_VERSION}/deploy/manifests/00-crds.yaml
             CERT_MANAGER_NAMESPACE=kube-system
-            kubectl label namespace ${CERT_MANAGER_NAMESPACE} certmanager.k8s.io/disable-validation="true"
+            kubectl label namespace ${CERT_MANAGER_NAMESPACE} certmanager.k8s.io/disable-validation="true" --overwrite
 
   deploy-dev-utilities: 
     docker:
