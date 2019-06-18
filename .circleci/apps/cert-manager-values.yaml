@@ -84,7 +84,8 @@ podLabels: {}
 #     - "1.1.1.1"
 #     - "8.8.8.8"
 
-nodeSelector: {}
+nodeSelector: 
+  target: utilities
 
 ingressShim: {}
   # defaultIssuerName: ""

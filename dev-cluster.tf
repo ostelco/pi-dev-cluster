@@ -121,6 +121,41 @@ module "neo4j-nodes" {
 
 }
 
+
+module "utilities-nodes" {
+  source         = "github.com/ostelco/ostelco-terraform-modules//terraform-google-gke-node-pool"
+  project_id     = "${var.project_id}"
+  regional       = "${var.regional}"
+  cluster_name   = "${module.gke.cluster_name}" # creates implicit dependency
+  cluster_region = "${var.cluster_region}"
+  
+  node_pool_name = "utilities-nodes"
+  pool_min_node_count    = "1"
+  initial_node_pool_size = "1"
+  pool_max_node_count    = "3"
+  node_tags              = ["dev", "utilities"]
+  auto_upgrade           = true
+  pool_node_machine_type = "n1-standard-1"
+
+  node_labels = {
+    "target"         = "utilities"
+    "machineType" = "n1-standard-1"
+    "env"         = "dev"
+  }
+  
+  # oauth_scopes define what Google API nodes in the pool have access to.
+  # list of APIs can be found here: https://developers.google.com/identity/protocols/googlescopes
+  oauth_scopes = [
+      "https://www.googleapis.com/auth/compute",
+      "https://www.googleapis.com/auth/devstorage.read_write",
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/service.management",
+    ]
+
+
+}
+
 resource "google_compute_address" "static_ambassador_ip" {
   provider = "google-beta"
   name = "ambassador-static-ip"

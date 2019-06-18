@@ -24,7 +24,7 @@ storageBackend = "secret" # default is configMap
  # protected = <true or false> -- default to false 
 [namespaces]
   [namespaces.neo4j]
-  [namespaces.vault]
+  # [namespaces.vault]
 
 # define any private/public helm charts repos you would like to get charts from
 # syntax: repo_name = "repo_url"
@@ -73,16 +73,16 @@ jetstack = "https://charts.jetstack.io"
     wait = true
     protected = true
 
-    # [apps.prometheus]
-    # description = "Promethues dev instance"
-    # namespace = "kube-system" 
-    # enabled = true
-    # chart = "stable/prometheus"
-    # version = "8.4.2"
-    # valuesFile = "apps/prometheus-values.yaml"
-    # priority = -5
-    # wait = true
-    # protected = true
+    [apps.prometheus]
+    description = "Promethues dev instance"
+    namespace = "kube-system" 
+    enabled = true
+    chart = "stable/prometheus"
+    version = "8.4.2"
+    valuesFile = "apps/prometheus-values.yaml"
+    priority = -5
+    wait = true
+    protected = true
 
     # [apps.grafana]
     # description = "Grafana dev instance"
@@ -110,11 +110,11 @@ jetstack = "https://charts.jetstack.io"
      [apps.ambassador.set]
       "service.loadBalancerIP" = "$AMBASSADOR_STATIC_IP"
 
-    [apps.vault]
-    name = "vault"
-    description = "Vault for secrets"
-    namespace = "vault"
-    enabled = true
-    chart = "incubator/vault"
-    version = "0.18.4"
-    valuesFile = "apps/vault-values.yaml"
+    # [apps.vault]
+    # name = "vault"
+    # description = "Vault for secrets"
+    # namespace = "vault"
+    # enabled = true
+    # chart = "incubator/vault"
+    # version = "0.18.4"
+    # valuesFile = "apps/vault-values.yaml"
